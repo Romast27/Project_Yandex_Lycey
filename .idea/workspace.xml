@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ae73f5e3-ece5-49e6-b025-a2389db24cf5" name="Changes" comment="Остальные вспомогательные файлы">
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Заготовки/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Заготовки/Classes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Заготовки/Player.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Заготовки/data/begin4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Заготовки/data/close-button.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Заготовки/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Заготовки/main.py" afterDir="false" />
-    </list>
+    <list default="true" id="ae73f5e3-ece5-49e6-b025-a2389db24cf5" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -86,7 +78,14 @@
       <option name="project" value="LOCAL" />
       <updated>1672175256220</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Добавление заднего фона в игре">
+      <created>1672346111048</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1672346111048</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -100,7 +99,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="main" />
+                        <option value="origin/main" />
                       </list>
                     </value>
                   </entry>
@@ -116,6 +115,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Основа проекта" />
     <MESSAGE value="Остальные вспомогательные файлы" />
-    <option name="LAST_COMMIT_MESSAGE" value="Остальные вспомогательные файлы" />
+    <MESSAGE value="Добавление заднего фона в игре" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавление заднего фона в игре" />
   </component>
 </project>
