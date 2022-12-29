@@ -43,8 +43,9 @@ class Player(pygame.sprite.Sprite):
         self.rect.y = self.player_y
         self.list_items = []
 
-    def player_move(self, dif_x, dif_y):
-        self.game_screen.fill(pygame.Color('white'))
+    def player_move(self, dif_x, dif_y, bg):
+        screen.fill((255, 255, 255))
+        bg.draw(self.game_screen)
         self.player_y += dif_y
         self.player_x += dif_x
         self.rect = self.image.get_rect()
@@ -86,3 +87,14 @@ class BeginText(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = 680
         self.rect.y = 400
+
+
+class Plitka(pygame.sprite.Sprite):
+    image = load_image('plitka1.png')
+
+    def __init__(self, x, y, *group):
+        super().__init__(*group)
+        self.image = pygame.transform.scale(Plitka.image, (120, 120))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y

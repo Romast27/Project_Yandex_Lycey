@@ -5,7 +5,7 @@ import time
 import pygame
 from PyQt5.QtWidgets import QApplication
 
-import Player
+import Classes
 import Authorize
 
 
@@ -47,17 +47,22 @@ def movement(x, y, player):
         player.image = pygame.transform.flip(player.image, True, False)
         turn = True
     time.sleep(0.075)
-    player.player_move(x, y)
+    player.player_move(x, y, level)
     player_sprite.draw(screen)
     items.draw(screen)
     pygame.display.flip()
 
 
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    authorizing = Authorize.Authorize()
-    authorizing.show()
-    if not authorizing.exec_() and authorizing.authorized:
+    # app = QApplication(sys.argv)
+    # authorizing = Authorize.Authorize()
+    # authorizing.show()
+    # if not authorizing.exec_() and authorizing.authorized:
+    if True:
+        running = True
+        turn = True
+        break_while = False
+
         width, height = 1920, 1080
         pygame.init()
         screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
@@ -65,16 +70,18 @@ if __name__ == '__main__':
         back_ground = pygame.sprite.Group()
         player_sprite = pygame.sprite.Group()
         items = pygame.sprite.Group()
-        running = True
-        turn = True
-        break_while = False
-        btn = Player.CloseButton(items)
-        bg = Player.BackGround(back_ground)
-        text = Player.BeginText(back_ground)
-        player = Player.Player(screen, (0, 0), None, player_sprite)
+        level = pygame.sprite.Group()
+        btn = Classes.CloseButton(items)
+        bg = Classes.BackGround(back_ground)
+        text = Classes.BeginText(back_ground)
+        player = Classes.Player(screen, (0, 0), None, player_sprite)
+        for i in range(16):
+            for j in range(9):
+                plitka = Classes.Plitka(i * 120, j * 120, level)
         back_ground.draw(screen)
         items.draw(screen)
         pygame.display.flip()
+
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -89,7 +96,7 @@ if __name__ == '__main__':
             if break_while:
                 break
         while running:
-            screen.fill((255, 255, 255))
+            level.draw(screen)
             player_sprite.draw(screen)
             items.draw(screen)
             pygame.display.flip()
@@ -102,27 +109,27 @@ if __name__ == '__main__':
                     if event.key == pygame.K_LEFT:
                         while event.type == pygame.KEYDOWN and move_is_valid((player.player_x - 10, player.player_y),
                                                                              (0, width - 75), (0, height - 75)):
-                            for event1 in pygame.event.get():
+                            for event in pygame.event.get():
                                 pass
                             movement(-10, 0, player)
                     elif event.key == pygame.K_RIGHT:
                         while event.type == pygame.KEYDOWN and move_is_valid((player.player_x + 10, player.player_y),
                                                                              (0, width - 75), (0, height - 75)):
-                            for event1 in pygame.event.get():
+                            for event in pygame.event.get():
                                 pass
                             movement(10, 0, player)
                     elif event.key == pygame.K_DOWN:
                         while event.type == pygame.KEYDOWN and move_is_valid((player.player_x, player.player_y + 10),
                                                                              (0, width - 75), (0, height - 75)):
-                            for event1 in pygame.event.get():
+                            for event in pygame.event.get():
                                 pass
                             movement(0, 10, player)
                     elif event.key == pygame.K_UP:
                         while event.type == pygame.KEYDOWN and move_is_valid((player.player_x, player.player_y - 10),
                                                                              (0, width - 75), (0, height - 75)):
-                            for event1 in pygame.event.get():
+                            for event in pygame.event.get():
                                 pass
                             movement(0, -10, player)
             pygame.display.flip()
     pygame.quit()
-    sys.exit(app.exec_())
+    # sys.exit(app.exec_())
