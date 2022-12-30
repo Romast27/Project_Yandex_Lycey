@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1cf84d49-b345-47d9-baac-cb158025a287" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/data/tile.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Authorize.py" beforeDir="false" afterPath="$PROJECT_DIR$/Authorize.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Classes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/plitka.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/plitka1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/start.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/start.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-    </list>
+    <list default="true" id="1cf84d49-b345-47d9-baac-cb158025a287" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -133,7 +123,14 @@
       <option name="project" value="LOCAL" />
       <updated>1672083684748</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Небольшие доработки + программа с тестировкой чужих файлов">
+      <created>1672432879274</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1672432879274</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -152,6 +149,7 @@
     <MESSAGE value="Основа" />
     <MESSAGE value="Первая версия" />
     <MESSAGE value="Файлы первой версии develop_Roma, база данных и графический интерфейс" />
-    <option name="LAST_COMMIT_MESSAGE" value="Файлы первой версии develop_Roma, база данных и графический интерфейс" />
+    <MESSAGE value="Небольшие доработки + программа с тестировкой чужих файлов" />
+    <option name="LAST_COMMIT_MESSAGE" value="Небольшие доработки + программа с тестировкой чужих файлов" />
   </component>
 </project>
