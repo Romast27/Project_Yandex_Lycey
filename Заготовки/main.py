@@ -54,11 +54,10 @@ def movement(x, y, player):
 
 
 if __name__ == '__main__':
-    # app = QApplication(sys.argv)
-    # authorizing = Authorize.Authorize()
-    # authorizing.show()
-    # if not authorizing.exec_() and authorizing.authorized:
-    if True:
+    app = QApplication(sys.argv)
+    authorizing = Authorize.Authorize()
+    authorizing.show()
+    if not authorizing.exec_() and authorizing.authorized:
         running = True
         turn = True
         break_while = False
@@ -77,7 +76,7 @@ if __name__ == '__main__':
         player = Classes.Player(screen, (0, 0), None, player_sprite)
         for i in range(16):
             for j in range(9):
-                plitka = Classes.Plitka(i * 120, j * 120, level)
+                tile = Classes.Tile(i * 120, j * 120, level)
         back_ground.draw(screen)
         items.draw(screen)
         pygame.display.flip()
@@ -132,4 +131,4 @@ if __name__ == '__main__':
                             movement(0, -10, player)
             pygame.display.flip()
     pygame.quit()
-    # sys.exit(app.exec_())
+    sys.exit(app.exec_())

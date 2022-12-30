@@ -89,12 +89,12 @@ class BeginText(pygame.sprite.Sprite):
         self.rect.y = 400
 
 
-class Plitka(pygame.sprite.Sprite):
-    image = load_image('plitka1.png')
+class Tile(pygame.sprite.Sprite):
+    image = load_image('tile.png')
 
     def __init__(self, x, y, *group):
         super().__init__(*group)
-        self.image = pygame.transform.scale(Plitka.image, (120, 120))
+        self.image = pygame.transform.scale(Tile.image, (120, 120))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
