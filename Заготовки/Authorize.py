@@ -29,7 +29,7 @@ class Authorize(QDialog):
             msg.exec_()
             return
         sql_names = "SELECT login FROM Players WHERE login=?"
-        if self.cur.execute(sql_names, (self.name,)).fetchone():
+        if self.cur.execute(sql_names, (login := self.name,)).fetchone():
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Critical)
             msg.setText("Ошибка\nТакой логин уже существует")
@@ -37,7 +37,7 @@ class Authorize(QDialog):
             msg.exec_()
             return
         sql = "INSERT INTO Players(login, password, current_level) VALUES(?, ?, ?)"
-        self.cur.execute(sql, (name_student := self.name, password := self.password, current_level := 1))
+        self.cur.execute(sql, (login := self.name, password := self.password, current_level := 1))
         self.authorized = self.name
         self.con.commit()
         self.con.close()
@@ -47,10 +47,10 @@ class Authorize(QDialog):
         self.name = self.edit_login.text()
         self.password = self.edit_password.text()
         sql = "SELECT id FROM Players WHERE login=? AND password=?"
-        info = self.cur.execute(sql, (name_student := self.name, password := self.password)).fetchall()
+        info = self.cur.execute(sql, (login := self.name, password := self.password)).fetchall()
         if info:
-            sql = "SELECT id, current level FROM Players WHERE login?"
-            info = self.cur.execute(sql, (name_student := self.name,)).fetchone()
+            sql = "SELECT id, current_level FROM Players WHERE login=?"
+            info = self.cur.execute(sql, (login := self.name,)).fetchone()
             self.id = info[0]
             self.authorized = self.name
             self.level = info[1]
