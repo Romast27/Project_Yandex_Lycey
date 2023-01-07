@@ -53,6 +53,42 @@ def load_image(name, colorkey=None):
     return image
 
 
+def open_book(book, text):
+    screen.fill((211, 10, 17), (240, 120, 1400, 800))
+    screen.fill((255, 193, 83), (270, 130, 1340, 780))
+    screen.fill((255, 201, 106), (280, 130, 1320, 780))
+    screen.fill((255, 212, 135), (290, 130, 1300, 780))
+    screen.fill((255, 221, 161), (300, 130, 1280, 780))
+    screen.fill((237, 197, 126), (920, 130, 40, 780))
+    screen.fill((215, 173, 99), (930, 130, 20, 780))
+    book.draw(screen)
+    st = ''
+    remaining_text = []
+    text_x = 310
+    text_y = 110
+    k = 0
+    font = pygame.font.SysFont("Segoe UI Black", 17)
+    for word in text:
+        if len(st + ' ' + word) > 60 and not (k > 30 and text_x != 970) and not (k > 28 and text_x == 970):
+            string = font.render(st, False, (0, 0, 0))
+            text_y += 25
+            screen.blit(string, (text_x, text_y))
+            st = ''
+            k += 1
+        st += ' ' + word
+        if k > 30 and text_x != 970:
+            text_x = 970
+            text_y = 110
+            k = 0
+        elif k > 28 and text_x == 970:
+            remaining_text.append(word)
+    if remaining_text:
+        string = font.render(st, False, (0, 0, 0))
+        text_y += 25
+        screen.blit(string, (text_x, text_y))
+    return remaining_text
+
+
 class Level:
     def __init__(self, game_screen, ground_file_name, level_width=5, level_height=5, cell_size=20):
         self.screen = game_screen
@@ -64,19 +100,17 @@ class Level:
         self.decoration_sprites = pygame.sprite.Group()
 
     def draw_level_ground(self, ground_sprite, decorations_sprite):
-        sprite_image_1 = load_image(ground_sprite)
-        sprite_image_1 = pygame.transform.scale(sprite_image_1, (self.cell_size, self.cell_size))
-        sprite_image_2 = load_image(decorations_sprite, 0)
-        sprite_image_2 = pygame.transform.scale(sprite_image_2, (self.cell_size, self.cell_size))
         for u in range(self.width):
             for i in range(self.height):
                 try:
                     if self.ground_file[i][u] == '#':
-                        image_gr = Image('ground sprite.png', (self.cell_size * u, self.cell_size * i),
-                                       (50, 50), self.ground_sprites)
+                        image_gr = Image(ground_sprite, (self.cell_size * u, self.cell_size * i),
+                                         (50, 50), None, self.ground_sprites)
                     if self.ground_file[i][u] == '0':
-                        image_dec = Image('dec.png', (self.cell_size * u, self.cell_size * i),
-                                          (50, 50), self.decoration_sprites)
+                        image_gr = Image(ground_sprite, (self.cell_size * u, self.cell_size * i),
+                                         (50, 50), None, self.ground_sprites)
+                        image_dec = Image(decorations_sprite, (self.cell_size * u, self.cell_size * i),
+                                          (50, 50), -1, self.decoration_sprites)
                     if self.ground_file[i][u] == '-':
                         screen.fill(pygame.Color('black'), (self.cell_size * u, self.cell_size * i,
                                                             self.cell_size, self.cell_size))
@@ -122,53 +156,10 @@ class Player(pygame.sprite.Sprite):
 
 
 class Image(pygame.sprite.Sprite):
-    def __init__(self, name_image, pos, size, *group):
+    def __init__(self, name_image, pos, size, colorkey, *group):
         super().__init__(*group)
-        image = load_image(name_image)
+        image = load_image(name_image, colorkey)
         self.image = pygame.transform.scale(image, size)
         self.rect = self.image.get_rect()
         self.rect.x = pos[0]
         self.rect.y = pos[1]
-
-# class BackGround(pygame.sprite.Sprite):
-#     image = load_image('background.jpg')
-#
-#     def __init__(self, *group):
-#         super().__init__(*group)
-#         self.image = pygame.transform.scale(BackGround.image, (1920, 1080))
-#         self.rect = self.image.get_rect()
-#         self.rect.x = 0
-#         self.rect.y = 0
-#
-#
-# class CloseButton(pygame.sprite.Sprite):
-#     image = load_image('close_button.png', -1)
-#
-#     def __init__(self, *group):
-#         super().__init__(*group)
-#         self.image = pygame.transform.scale(CloseButton.image, (50, 50))
-#         self.rect = self.image.get_rect()
-#         self.rect.x = 1860
-#         self.rect.y = 10
-#
-#
-# class BeginText(pygame.sprite.Sprite):
-#     image = load_image('start.png')
-#
-#     def __init__(self, *group):
-#         super().__init__(*group)
-#         self.image = pygame.transform.scale(BeginText.image, (600, 170))
-#         self.rect = self.image.get_rect()
-#         self.rect.x = 680
-#         self.rect.y = 400
-#
-#
-# class Tile(pygame.sprite.Sprite):
-#     image = load_image('ground sprite.png')
-#
-#     def __init__(self, x, y, *group):
-#         super().__init__(*group)
-#         self.image = pygame.transform.scale(Tile.image, (70, 70))
-#         self.rect = self.image.get_rect()
-#         self.rect.x = x
-#         self.rect.y = y

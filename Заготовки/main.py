@@ -8,10 +8,11 @@ import Authorize
 
 
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    authorizing = Authorize.Authorize()
-    authorizing.show()
-    if not authorizing.exec_() and authorizing.authorized:
+    # app = QApplication(sys.argv)
+    # authorizing = Authorize.Authorize()
+    # authorizing.show()
+    # if not authorizing.exec_() and authorizing.authorized:
+    if True:
         running = True
         turn = True
         break_while = False
@@ -22,14 +23,15 @@ if __name__ == '__main__':
 
         menu_ground = pygame.sprite.Group()
         player_sprite = pygame.sprite.Group()
-        items = pygame.sprite.Group()
+        buttons = pygame.sprite.Group()
         ground_sprites = pygame.sprite.Group()
-        image_btn = Classes.Image('close_button.png', (1860, 10), (50, 50), items)
-        image_bg = Classes.Image('background.jpg', (0, 0), (1920, 1080), menu_ground)
-        image_text = Classes.Image('start.png', (680, 400), (600, 170), menu_ground)
+        book = pygame.sprite.Group()
+        close_button = Classes.Image('close_button.png', (1860, 10), (50, 50), None, buttons)
+        background = Classes.Image('background.jpg', (0, 0), (1920, 1080), None, menu_ground)
+        start_text = Classes.Image('start.png', (680, 400), (600, 170), None, menu_ground)
         player = Classes.Player(screen, (0, 0), None, player_sprite)
-        items.draw(screen)
         menu_ground.draw(screen)
+        buttons.draw(screen)
         pygame.display.flip()
 
         while running:
@@ -47,18 +49,52 @@ if __name__ == '__main__':
                 break
 
         screen.fill((255, 255, 255))
+        flag_book = False
+        text = []
+        dict_books = {1: '', 2: 'Знакомство с циклом while.txt'}
+        level = Classes.Level(screen, 'level.txt', 8, 8, 50)
+        button_book = Classes.Image('book_button.png', (1860, 70), (50, 50), -1, buttons)
+        cross = Classes.Image('cross.png', (1700, 100), (50, 50), -1, book)
+        arrow = Classes.Image('arrow.png', (1500, 860), (70, 50), -1, book)
         while running:
-            level = Classes.Level(screen, 'level.txt', 8, 8, 50)
             level.draw_level_ground('ground sprite.png', 'dec.png')
             player_sprite.draw(screen)
-            items.draw(screen)
+            buttons.draw(screen)
             pygame.display.flip()
-
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
-                if event.type == pygame.MOUSEBUTTONDOWN and Classes.move_is_valid(event.pos, (1840, 1910), (10, 80)):
-                    running = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if Classes.move_is_valid(event.pos, (1860, 1910), (10, 60)):
+                        running = False
+                    if Classes.move_is_valid(event.pos, (1860, 1910), (70, 120)):
+                        name_book = dict_books[2]
+                        with open(name_book, encoding="utf8", mode='r') as f:
+                            data = f.read()
+                            data = data.split('\n')
+                            for ls in data:
+                                text.extend(ls.split(' '))
+                        remaining_text = Classes.open_book(book, text)
+                        pygame.display.flip()
+                        flag_book = True
+                        break_loop = False
+                        while not break_loop:
+                            for event in pygame.event.get():
+                                if event.type == pygame.MOUSEBUTTONDOWN:
+                                    if Classes.move_is_valid(event.pos, (1700, 1750), (100, 150)):
+                                        break_loop = True
+                                        break
+                                    if Classes.move_is_valid(event.pos, (1500, 1570), (860, 910)):
+                                        print(remaining_text)
+                                        if remaining_text:
+                                            remaining_text = Classes.open_book(book, remaining_text)
+                                            pygame.display.flip()
+                    if Classes.move_is_valid(event.pos, (1700, 1750), (100, 150)) and flag_book:
+                        flag_book = False
+                        screen.fill((255, 255, 255))
+                        level.draw_level_ground('ground sprite.png', 'dec.png')
+                        player_sprite.draw(screen)
+                        buttons.draw(screen)
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
                         while event.type == pygame.KEYDOWN and Classes.move_is_valid((player.player_x - 10,
@@ -67,7 +103,7 @@ if __name__ == '__main__':
                                                                                      (0, height - 75)):
                             for event in pygame.event.get():
                                 pass
-                            Classes.movement(-10, 0, player_sprite, items, player, level, screen)
+                            Classes.movement(-10, 0, player_sprite, buttons, player, level, screen)
                     elif event.key == pygame.K_RIGHT:
                         while event.type == pygame.KEYDOWN and Classes.move_is_valid((player.player_x + 10,
                                                                                       player.player_y),
@@ -75,7 +111,7 @@ if __name__ == '__main__':
                                                                                      (0, height - 75)):
                             for event in pygame.event.get():
                                 pass
-                            Classes.movement(10, 0, player_sprite, items, player, level, screen)
+                            Classes.movement(10, 0, player_sprite, buttons, player, level, screen)
                     elif event.key == pygame.K_DOWN:
                         while event.type == pygame.KEYDOWN and Classes.move_is_valid((player.player_x,
                                                                                       player.player_y + 10),
@@ -83,7 +119,7 @@ if __name__ == '__main__':
                                                                                      (0, height - 75)):
                             for event in pygame.event.get():
                                 pass
-                            Classes.movement(0, 10, player_sprite, items, player, level, screen)
+                            Classes.movement(0, 10, player_sprite, buttons, player, level, screen)
                     elif event.key == pygame.K_UP:
                         while event.type == pygame.KEYDOWN and Classes.move_is_valid((player.player_x,
                                                                                       player.player_y - 10),
@@ -91,7 +127,7 @@ if __name__ == '__main__':
                                                                                      (0, height - 75)):
                             for event in pygame.event.get():
                                 pass
-                            Classes.movement(0, -10, player_sprite, items, player, level, screen)
+                            Classes.movement(0, -10, player_sprite, buttons, player, level, screen)
             pygame.display.flip()
 
     pygame.quit()
