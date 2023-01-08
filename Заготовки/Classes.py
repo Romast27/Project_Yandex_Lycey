@@ -7,9 +7,11 @@ import pygame
 
 turn = True
 pygame.init()
-size = width, height = 800, 800
+size = width, height = 1920, 1080
 screen = pygame.display.set_mode(size)
 screen.fill((255, 255, 255))
+horizontal_borders = pygame.sprite.Group()
+vertical_borders = pygame.sprite.Group()
 
 
 def is_on_click(pos, x, y, w, h):
@@ -22,17 +24,19 @@ def move_is_valid(pos, arg1, arg2):
 
 def movement(x, y, player_sprite, items, player, level, screen):
     global turn
-    if turn and x == -10:
+    if turn and x == -30:
         player.image = pygame.transform.flip(player.image, True, False)
         turn = False
-    elif not turn and x == 10:
+    elif not turn and x == 30:
         player.image = pygame.transform.flip(player.image, True, False)
         turn = True
     sleep(0.075)
     screen.fill(pygame.Color('white'))
-    level.draw_level_ground('ground sprite.png', 'dec.png')
+    level.ground_sprites.draw(screen)
+    level.decoration_sprites.draw(screen)
     player.player_move(x, y, level)
     player_sprite.draw(screen)
+    level.personages.draw(screen)
     items.draw(screen)
     pygame.display.flip()
 
@@ -62,30 +66,42 @@ def open_book(book, text):
     screen.fill((237, 197, 126), (920, 130, 40, 780))
     screen.fill((215, 173, 99), (930, 130, 20, 780))
     book.draw(screen)
-    st = ''
+    flag = True
+    remaining_st = ''
     remaining_text = []
     text_x = 310
     text_y = 110
     k = 0
     font = pygame.font.SysFont("Segoe UI Black", 17)
-    for word in text:
-        if len(st + ' ' + word) > 60 and not (k > 30 and text_x != 970) and not (k > 28 and text_x == 970):
+    for num, item in enumerate(text):
+        if not flag:
+            break
+        item = item.split(' ')
+        k += 1
+        st = ''
+        for word in item:
+            if k > 30 and text_x != 970:
+                text_x = 970
+                text_y = 110
+                k = 0
+            elif k > 28 and text_x == 970:
+                remaining_st += word + ' '
+                flag = False
+            elif len(st + ' ' + word) > 60 and not (k > 30 and text_x != 970) and not (k > 28 and text_x == 970):
+                string = font.render(st, False, (0, 0, 0))
+                text_y += 25
+                screen.blit(string, (text_x, text_y))
+                st = ''
+                k += 1
+            st += ' ' + word
+        if st and k < 28:
             string = font.render(st, False, (0, 0, 0))
             text_y += 25
             screen.blit(string, (text_x, text_y))
-            st = ''
-            k += 1
-        st += ' ' + word
-        if k > 30 and text_x != 970:
-            text_x = 970
-            text_y = 110
-            k = 0
-        elif k > 28 and text_x == 970:
-            remaining_text.append(word)
-    if remaining_text:
-        string = font.render(st, False, (0, 0, 0))
-        text_y += 25
-        screen.blit(string, (text_x, text_y))
+    pygame.display.flip()
+    if remaining_st:
+        remaining_text.append(remaining_st)
+    remaining_text.extend(text[num:])
     return remaining_text
 
 
@@ -98,42 +114,72 @@ class Level:
         self.cell_size = cell_size
         self.ground_sprites = pygame.sprite.Group()
         self.decoration_sprites = pygame.sprite.Group()
+        self.personages = pygame.sprite.Group()
 
-    def draw_level_ground(self, ground_sprite, decorations_sprite):
+    def draw_level_ground(self, ground_sprite, decorations_sprite, player, player_sprite):
         for u in range(self.width):
             for i in range(self.height):
                 try:
                     if self.ground_file[i][u] == '#':
                         image_gr = Image(ground_sprite, (self.cell_size * u, self.cell_size * i),
-                                         (50, 50), None, self.ground_sprites)
+                                         (self.cell_size, self.cell_size), None, self.ground_sprites)
                     if self.ground_file[i][u] == '0':
                         image_gr = Image(ground_sprite, (self.cell_size * u, self.cell_size * i),
-                                         (50, 50), None, self.ground_sprites)
+                                         (self.cell_size, self.cell_size), None, self.ground_sprites)
                         image_dec = Image(decorations_sprite, (self.cell_size * u, self.cell_size * i),
-                                          (50, 50), -1, self.decoration_sprites)
+                                          (self.cell_size, self.cell_size), -1, self.decoration_sprites)
+                    if self.ground_file[i][u] == '@':
+                        image_gr = Image(ground_sprite, (self.cell_size * u, self.cell_size * i),
+                                         (self.cell_size, self.cell_size), None, self.ground_sprites)
+                        player.player_x = self.cell_size * u
+                        player.player_y = self.cell_size * i
+                        player.rect = player.image.get_rect()
+                        player.rect.x = self.cell_size * u
+                        player.rect.y = self.cell_size * i
+                        player_sprite.draw(self.screen)
                     if self.ground_file[i][u] == '-':
                         screen.fill(pygame.Color('black'), (self.cell_size * u, self.cell_size * i,
                                                             self.cell_size, self.cell_size))
                 except IndexError:
                     pass
+        for item in ((113, 75), (713, 75), (1313, 75), (513, 475), (1813, 475)):
+            image_tv = Image('TV.png', (item[0], item[1]),
+                             (75, 75), None, self.decoration_sprites)
+        for item in ((413, 75), (1013, 75), (1613, 75), (1713, 475)):
+            image_pc = Image('comp.png', (item[0], item[1]),
+                             (75, 75), None, self.decoration_sprites)
+        for item in ((413, 375), ):
+            image_pc2 = Image('fra.png', (item[0], item[1]),
+                              (75, 75), None, self.decoration_sprites)
+        for item in ((1770, 930), (1802, 855)):
+            image_rad = Image('radiation.png', (item[0], item[1]),
+                              (75, 75), None, self.decoration_sprites)
+        for item in ((1845, 1005), (1845, 930), (1770, 1005)):
+            image_el = Image('elec.png', (item[0], item[1]),
+                             (75, 75), None, self.decoration_sprites)
+        image_pers = Image('pers1.png', (420, 480),
+                           (75, 111), None, self.personages)
+        image_pers = Image('pers1.png', (1690, 980),
+                           (75, 101), None, self.personages)
         self.ground_sprites.draw(self.screen)
         self.decoration_sprites.draw(self.screen)
+        self.personages.draw(self.screen)
 
 
 class Player(pygame.sprite.Sprite):
-    image = load_image('player.jpg', -1)
+    image = load_image('pers.png')
 
     def __init__(self, game_screen, pos, game_board, *group):
         super().__init__(*group)
-        self.image = pygame.transform.scale(Player.image, (50, 50))
+        self.image = pygame.transform.scale(Player.image, (75, 100))
         self.player_x = pos[0]
         self.player_y = pos[1]
         self.game_board = game_board
         self.rect = self.image.get_rect()
-        self.rect.x = self.player_x
-        self.rect.y = self.player_y
+        self.rect.x = pos[0]
+        self.rect.y = pos[1]
         self.game_screen = game_screen
-        self.list_items = []
+        self.flag_dialog = False
         self.mask = pygame.mask.from_surface(self.image)
 
     def player_move(self, dif_x, dif_y, level):
@@ -142,17 +188,29 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = self.player_x
         self.rect.y = self.player_y
-        if not pygame.sprite.spritecollideany(self, level.decoration_sprites):
-            return
-        else:
+        if pygame.sprite.spritecollideany(self, level.decoration_sprites):
             self.player_y -= dif_y
             self.player_x -= dif_x
             self.rect = self.image.get_rect()
             self.rect.x = self.player_x
             self.rect.y = self.player_y
-
-    def add_item(self, item):
-        self.list_items.append(item)
+            self.flag_dialog = False
+        if pygame.sprite.spritecollideany(self, level.personages):
+            self.dialog = pygame.sprite.Group()
+            image_pers = Image('dialog.png', (250, 500),
+                               (1420, 480), -1, self.dialog)
+            image_pers = Image('next.png', (1450, 900),
+                               (136, 44), -1, self.dialog)
+            self.dialog.draw(screen)
+            self.player_y -= dif_y
+            self.player_x -= dif_x
+            self.rect = self.image.get_rect()
+            self.rect.x = self.player_x
+            self.rect.y = self.player_y
+            self.flag_dialog = True
+        else:
+            self.flag_dialog = False
+            return
 
 
 class Image(pygame.sprite.Sprite):
