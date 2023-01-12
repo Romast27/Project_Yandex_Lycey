@@ -2,10 +2,16 @@ import os
 import sys
 from time import sleep
 
+from PyQt5.QtWidgets import QApplication
+from PyQt5 import QtCore
 import pygame
+
+import Answering_question
 
 
 turn = True
+dict_books = {1: '', 2: 'Знакомство с циклом while.txt'}
+dict = {1: False, 2: False, 3: False}
 pygame.init()
 size = width, height = 1920, 1080
 screen = pygame.display.set_mode(size)
@@ -31,12 +37,13 @@ def movement(x, y, player_sprite, items, player, level, screen):
         player.image = pygame.transform.flip(player.image, True, False)
         turn = True
     sleep(0.075)
+    player.player_move(x, y, level)
     screen.fill(pygame.Color('white'))
     level.ground_sprites.draw(screen)
     level.decoration_sprites.draw(screen)
-    player.player_move(x, y, level)
     player_sprite.draw(screen)
-    level.personages.draw(screen)
+    level.pers_1.draw(screen)
+    level.pers_2.draw(screen)
     items.draw(screen)
     pygame.display.flip()
 
@@ -55,6 +62,62 @@ def load_image(name, colorkey=None):
     else:
         image = image.convert_alpha()
     return image
+
+
+def draw_text(text, font):
+    remaining_st = ''
+    st = ''
+    k = 0
+    text = text.split(' ')
+    font = pygame.font.SysFont("Segoe UI Black", font)
+    text_x = 280
+    text_y = 530
+    for word in text:
+        if k > 30 and text_x != 970:
+            text_x = 970
+            text_y = 110
+            k = 0
+        elif k > 28 and text_x == 970:
+            remaining_st += word + ' '
+            flag = False
+        elif len(st + ' ' + word) > 50 and not (k > 30 and text_x != 970) and not (k > 28 and text_x == 970):
+            string = font.render(st, False, (0, 0, 0))
+            text_y += 40
+            screen.blit(string, (text_x, text_y))
+            st = ''
+            k += 1
+        st += ' ' + word
+    if st and k < 28:
+        string = font.render(st, False, (0, 0, 0))
+        text_y += 40
+        screen.blit(string, (text_x, text_y))
+    pygame.display.flip()
+
+
+def make_dialog(num_pers, dialog_text, answer, question):
+    dialog = pygame.sprite.Group()
+    image = Image('dialog.png', (250, 500),
+                       (1420, 480), -1, dialog)
+    image = Image('next.png', (1450, 900),
+                       (136, 44), -1, dialog)
+    image = Image('close.png', (1250, 900),
+                       (150, 44), -1, dialog)
+    dialog.draw(screen)
+    flag_dialog = True
+    running = True
+    draw_text(dialog_text, 45)
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if move_is_valid(event.pos, (1450, 1586), (900, 944)):
+                    app = QApplication(sys.argv)
+                    answering = Answering_question.AnsweringQuestion(answer, question)
+                    answering.show()
+                    if not answering.exec_() and answering.finished:
+                        dict[num_pers - 1] = True
+                if move_is_valid(event.pos, (1250, 1400), (900, 944)):
+                    running = False
+                    return
 
 
 def open_book(book, text):
@@ -105,6 +168,81 @@ def open_book(book, text):
     return remaining_text
 
 
+def main_cycle(player, player_sprite, level, buttons, book, num_level):
+    running = True
+    while running:
+        pygame.display.flip()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if move_is_valid(event.pos, (1860, 1910), (10, 60)):
+                    running = False
+
+                if move_is_valid(event.pos, (1860, 1910), (70, 120)):
+                    name_book = dict_books[num_level]
+                    with open(name_book, encoding="utf8", mode='r') as f:
+                        data = f.read()
+                        text = data.split('\n')
+                    remaining_text = open_book(book, text)
+                    flag_book = True
+                    break_loop = False
+                    while not break_loop:
+                        for event in pygame.event.get():
+                            if event.type == pygame.MOUSEBUTTONDOWN:
+                                if move_is_valid(event.pos, (1700, 1750), (100, 150)):
+                                    break_loop = True
+                                    break
+                                if move_is_valid(event.pos, (1500, 1570), (860, 910)):
+                                    if remaining_text:
+                                        remaining_text = open_book(book, remaining_text)
+                if move_is_valid(event.pos, (1700, 1750), (100, 150)) and flag_book:
+                    flag_book = False
+                    screen.fill((255, 255, 255))
+                    level.ground_sprites.draw(screen)
+                    level.decoration_sprites.draw(screen)
+                    player_sprite.draw(screen)
+                    buttons.draw(screen)
+                    level.pers_1.draw(screen)
+                    level.pers_2.draw(screen)
+                    pygame.display.flip()
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    while event.type == pygame.KEYDOWN and move_is_valid((player.player_x - 10,
+                                                                                  player.player_y),
+                                                                                 (0, width - 100),
+                                                                                 (0, height - 100)):
+                        for event in pygame.event.get():
+                            pass
+                        movement(-30, 0, player_sprite, buttons, player, level, screen)
+                elif event.key == pygame.K_RIGHT:
+                    while event.type == pygame.KEYDOWN and move_is_valid((player.player_x + 10,
+                                                                                  player.player_y),
+                                                                                 (0, width - 100),
+                                                                                 (0, height - 100)):
+                        for event in pygame.event.get():
+                            pass
+                        movement(30, 0, player_sprite, buttons, player, level, screen)
+                elif event.key == pygame.K_DOWN:
+                    while event.type == pygame.KEYDOWN and move_is_valid((player.player_x,
+                                                                                  player.player_y + 10),
+                                                                                 (0, width - 100),
+                                                                                 (0, height - 100)):
+                        for event in pygame.event.get():
+                            pass
+                        movement(0, 30, player_sprite, buttons, player, level, screen)
+                elif event.key == pygame.K_UP:
+                    while event.type == pygame.KEYDOWN and move_is_valid((player.player_x,
+                                                                                  player.player_y - 10),
+                                                                                 (0, width - 100),
+                                                                                 (0, height - 100)):
+                        for event in pygame.event.get():
+                            pass
+                        movement(0, -30, player_sprite, buttons, player, level, screen)
+        pygame.display.flip()
+
+
 class Level:
     def __init__(self, game_screen, ground_file_name, level_width=5, level_height=5, cell_size=20):
         self.screen = game_screen
@@ -114,7 +252,9 @@ class Level:
         self.cell_size = cell_size
         self.ground_sprites = pygame.sprite.Group()
         self.decoration_sprites = pygame.sprite.Group()
-        self.personages = pygame.sprite.Group()
+        self.pers_1 = pygame.sprite.Group()
+        self.pers_2 = pygame.sprite.Group()
+        self.pers_3 = pygame.sprite.Group()
 
     def draw_level_ground(self, ground_sprite, decorations_sprite, player, player_sprite):
         for u in range(self.width):
@@ -142,28 +282,10 @@ class Level:
                                                             self.cell_size, self.cell_size))
                 except IndexError:
                     pass
-        for item in ((113, 75), (713, 75), (1313, 75), (513, 475), (1813, 475)):
-            image_tv = Image('TV.png', (item[0], item[1]),
-                             (75, 75), None, self.decoration_sprites)
-        for item in ((413, 75), (1013, 75), (1613, 75), (1713, 475)):
-            image_pc = Image('comp.png', (item[0], item[1]),
-                             (75, 75), None, self.decoration_sprites)
-        for item in ((413, 375), ):
-            image_pc2 = Image('fra.png', (item[0], item[1]),
-                              (75, 75), None, self.decoration_sprites)
-        for item in ((1770, 930), (1802, 855)):
-            image_rad = Image('radiation.png', (item[0], item[1]),
-                              (75, 75), None, self.decoration_sprites)
-        for item in ((1845, 1005), (1845, 930), (1770, 1005)):
-            image_el = Image('elec.png', (item[0], item[1]),
-                             (75, 75), None, self.decoration_sprites)
-        image_pers = Image('pers1.png', (420, 480),
-                           (75, 111), None, self.personages)
-        image_pers = Image('pers1.png', (1690, 980),
-                           (75, 101), None, self.personages)
         self.ground_sprites.draw(self.screen)
         self.decoration_sprites.draw(self.screen)
-        self.personages.draw(self.screen)
+        self.pers_1.draw(self.screen)
+        self.pers_2.draw(self.screen)
 
 
 class Player(pygame.sprite.Sprite):
@@ -194,23 +316,27 @@ class Player(pygame.sprite.Sprite):
             self.rect = self.image.get_rect()
             self.rect.x = self.player_x
             self.rect.y = self.player_y
-            self.flag_dialog = False
-        if pygame.sprite.spritecollideany(self, level.personages):
-            self.dialog = pygame.sprite.Group()
-            image_pers = Image('dialog.png', (250, 500),
-                               (1420, 480), -1, self.dialog)
-            image_pers = Image('next.png', (1450, 900),
-                               (136, 44), -1, self.dialog)
-            self.dialog.draw(screen)
+        if pygame.sprite.spritecollideany(self, level.pers_1) and not dict[1] and self.flag_dialog:
             self.player_y -= dif_y
             self.player_x -= dif_x
             self.rect = self.image.get_rect()
             self.rect.x = self.player_x
             self.rect.y = self.player_y
-            self.flag_dialog = True
-        else:
+            make_dialog(1,
+                        'Привет! Мне очень нужна чья-то помощь. Соседний реактор, откуда к нам поступает энергия, заклинил и бесконтрольно вырабатывает энергию бесконтрольно из-за чего к нам поступает слишком много электричества. Не мог бы ты помочь и сказать как прекратить его работу',
+                        'break', 'Как называется оператор прерывающий цикл?')
             self.flag_dialog = False
             return
+        if pygame.sprite.spritecollideany(self, level.pers_2) and not dict[1] and self.flag_dialog:
+            self.player_y -= dif_y
+            self.player_x -= dif_x
+            self.rect = self.image.get_rect()
+            self.rect.x = self.player_x
+            self.rect.y = self.player_y
+            make_dialog(2, 'Привет! Мне очень нужна чья-то помощь. Соседний реактор, откуда к нам поступает энергия, заклинил и бесконтрольно вырабатывает энергию бесконтрольно из-за чего к нам поступает слишком много электричества. Не мог бы ты помочь и сказать как прекратить его работу', 'break', 'Как называется оператор прерывающий цикл?')
+            self.flag_dialog = False
+            return
+        self.flag_dialog = True
 
 
 class Image(pygame.sprite.Sprite):
