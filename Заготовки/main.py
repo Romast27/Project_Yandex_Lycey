@@ -8,11 +8,11 @@ import Authorize
 
 
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    authorizing = Authorize.Authorize()
-    authorizing.show()
-    if not authorizing.exec_() and authorizing.authorized:
-    #if True:
+    # app = QApplication(sys.argv)
+    # authorizing = Authorize.Authorize()
+    # authorizing.show()
+    # if not authorizing.exec_() and authorizing.authorized:
+    if True:
         running = True
         turn = True
         break_while = False

@@ -7,11 +7,15 @@ from PyQt5 import QtCore
 import pygame
 
 import Answering_question
+import Testing_files
 
 
 turn = True
 dict_books = {1: '', 2: 'Знакомство с циклом while.txt'}
-dict = {1: False, 2: False, 3: False}
+dict_res = {1: False, 2: False, 3: False}
+with open('Текста диалогов.txt', mode='r', encoding='utf8') as file:
+    text_dialog = file.read()
+    text_dialog = text_dialog.split('\n')
 pygame.init()
 size = width, height = 1920, 1080
 screen = pygame.display.set_mode(size)
@@ -94,7 +98,7 @@ def draw_text(text, font):
     pygame.display.flip()
 
 
-def make_dialog(num_pers, dialog_text, answer, question):
+def make_dialog(dialog_text):
     dialog = pygame.sprite.Group()
     image = Image('dialog.png', (250, 500),
                        (1420, 480), -1, dialog)
@@ -103,21 +107,7 @@ def make_dialog(num_pers, dialog_text, answer, question):
     image = Image('close.png', (1250, 900),
                        (150, 44), -1, dialog)
     dialog.draw(screen)
-    flag_dialog = True
-    running = True
     draw_text(dialog_text, 45)
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if move_is_valid(event.pos, (1450, 1586), (900, 944)):
-                    app = QApplication(sys.argv)
-                    answering = Answering_question.AnsweringQuestion(answer, question)
-                    answering.show()
-                    if not answering.exec_() and answering.finished:
-                        dict[num_pers - 1] = True
-                if move_is_valid(event.pos, (1250, 1400), (900, 944)):
-                    running = False
-                    return
 
 
 def open_book(book, text):
@@ -216,6 +206,8 @@ def main_cycle(player, player_sprite, level, buttons, book, num_level):
                         for event in pygame.event.get():
                             pass
                         movement(-30, 0, player_sprite, buttons, player, level, screen)
+                        if player.flag_dialog:
+                            break
                 elif event.key == pygame.K_RIGHT:
                     while event.type == pygame.KEYDOWN and move_is_valid((player.player_x + 10,
                                                                                   player.player_y),
@@ -224,6 +216,8 @@ def main_cycle(player, player_sprite, level, buttons, book, num_level):
                         for event in pygame.event.get():
                             pass
                         movement(30, 0, player_sprite, buttons, player, level, screen)
+                        if player.flag_dialog:
+                            break
                 elif event.key == pygame.K_DOWN:
                     while event.type == pygame.KEYDOWN and move_is_valid((player.player_x,
                                                                                   player.player_y + 10),
@@ -232,6 +226,8 @@ def main_cycle(player, player_sprite, level, buttons, book, num_level):
                         for event in pygame.event.get():
                             pass
                         movement(0, 30, player_sprite, buttons, player, level, screen)
+                        if player.flag_dialog:
+                            break
                 elif event.key == pygame.K_UP:
                     while event.type == pygame.KEYDOWN and move_is_valid((player.player_x,
                                                                                   player.player_y - 10),
@@ -240,6 +236,8 @@ def main_cycle(player, player_sprite, level, buttons, book, num_level):
                         for event in pygame.event.get():
                             pass
                         movement(0, -30, player_sprite, buttons, player, level, screen)
+                        if player.flag_dialog:
+                            break
         pygame.display.flip()
 
 
@@ -316,27 +314,55 @@ class Player(pygame.sprite.Sprite):
             self.rect = self.image.get_rect()
             self.rect.x = self.player_x
             self.rect.y = self.player_y
-        if pygame.sprite.spritecollideany(self, level.pers_1) and not dict[1] and self.flag_dialog:
+        if pygame.sprite.spritecollideany(self, level.pers_1) and not dict_res[1] and not self.flag_dialog:
             self.player_y -= dif_y
             self.player_x -= dif_x
             self.rect = self.image.get_rect()
             self.rect.x = self.player_x
             self.rect.y = self.player_y
-            make_dialog(1,
-                        'Привет! Мне очень нужна чья-то помощь. Соседний реактор, откуда к нам поступает энергия, заклинил и бесконтрольно вырабатывает энергию бесконтрольно из-за чего к нам поступает слишком много электричества. Не мог бы ты помочь и сказать как прекратить его работу',
-                        'break', 'Как называется оператор прерывающий цикл?')
-            self.flag_dialog = False
+            make_dialog(text_dialog[0])
+            answer = '1, 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97'
+            running = True
+            while running:
+                for event in pygame.event.get():
+                    print(dict_res)
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if move_is_valid(event.pos, (1450, 1586), (900, 944)):
+                            app = QApplication(sys.argv)
+                            ex = Testing_files.Example(answer)
+                            ex.show()
+                            if ex.finished:
+                                dict_res[1] = True
+                                print(dict_res)
+                                #running = False
+                        if move_is_valid(event.pos, (1250, 1400), (900, 944)):
+                            running = False
+            self.flag_dialog = True
             return
-        if pygame.sprite.spritecollideany(self, level.pers_2) and not dict[1] and self.flag_dialog:
+        if pygame.sprite.spritecollideany(self, level.pers_2) and not dict_res[2] and not self.flag_dialog:
             self.player_y -= dif_y
             self.player_x -= dif_x
             self.rect = self.image.get_rect()
             self.rect.x = self.player_x
             self.rect.y = self.player_y
-            make_dialog(2, 'Привет! Мне очень нужна чья-то помощь. Соседний реактор, откуда к нам поступает энергия, заклинил и бесконтрольно вырабатывает энергию бесконтрольно из-за чего к нам поступает слишком много электричества. Не мог бы ты помочь и сказать как прекратить его работу', 'break', 'Как называется оператор прерывающий цикл?')
-            self.flag_dialog = False
+            make_dialog(text_dialog[1])
+            running = True
+            while running:
+                for event in pygame.event.get():
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if move_is_valid(event.pos, (1450, 1586), (900, 944)):
+                            app = QApplication(sys.argv)
+                            answering = Answering_question.AnsweringQuestion('break',
+                                                                             'Как называется оператор прерывающий цикл?')
+                            answering.show()
+                            if not answering.exec_() and answering.finished:
+                                dict_res[1] = True
+                                #running = False
+                        if move_is_valid(event.pos, (1250, 1400), (900, 944)):
+                            running = False
+            self.flag_dialog = True
             return
-        self.flag_dialog = True
+        self.flag_dialog = False
 
 
 class Image(pygame.sprite.Sprite):
