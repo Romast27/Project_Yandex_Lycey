@@ -49,7 +49,7 @@ if __name__ == '__main__':
                     continue
             if break_while:
                 break
-
+        id = 2
         if id == 2:
             screen.fill((255, 255, 255))
             flag_book = False
@@ -85,8 +85,8 @@ if __name__ == '__main__':
             buttons.draw(screen)
             player_sprite.draw(screen)
             next_level.draw(screen)
-            if Classes.main_cycle(player, player_sprite, level, buttons, book, id, next_level):
+            if Classes.main_cycle(player, player_sprite, level, buttons, book, 2, next_level, id):
                 pass # сделать босса
 
     pygame.quit()
-    sys.exit(app.exec_())
+    # sys.exit(app.exec_())

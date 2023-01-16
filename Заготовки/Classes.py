@@ -163,7 +163,7 @@ def main_cycle(player, player_sprite, level, buttons, book, num_level, next_leve
     dict_res = {1: False, 2: False, 3: False}
     con = sqlite3.connect("project_db.sqlite")
     cur = con.cursor()
-    cur.execute("UPDATE Students_answers SET current_level=? WHERE id=?", (current_level:=num_level, id:=id))
+    cur.execute("UPDATE Players SET current_level=? WHERE id=?", (current_level:=num_level, id:=id))
     con.commit()
     con.close()
     running = True
@@ -319,7 +319,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = self.player_x
         self.rect.y = self.player_y
-        if move_is_valid((810, 30), (996, 45)) and all(dict_res.items()):
+        if move_is_valid((self.player_y, self.player_x), (810, 996), (30, 45)) and all(dict_res.items()):
             self.flag_next_level = True
         if pygame.sprite.spritecollideany(self, level.decoration_sprites):
             self.player_y -= dif_y
