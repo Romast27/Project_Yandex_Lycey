@@ -5,15 +5,15 @@ from time import sleep
 from PyQt5.QtWidgets import QApplication
 from PyQt5 import QtCore
 import pygame
+import sqlite3
 
 import Answering_question
 import Testing_files
 
 
 turn = True
-dict_books = {1: '', 2: 'Знакомство с циклом while.txt'}
-dict_res = {1: False, 2: False, 3: False}
-with open('Текста диалогов.txt', mode='r', encoding='utf8') as file:
+dict_res = {}
+with open('data\Текста диалогов2.txt', mode='r', encoding='utf8') as file:
     text_dialog = file.read()
     text_dialog = text_dialog.split('\n')
 pygame.init()
@@ -32,7 +32,7 @@ def move_is_valid(pos, arg1, arg2):
     return arg1[0] <= pos[0] <= arg1[1] and arg2[0] <= pos[1] <= arg2[1]
 
 
-def movement(x, y, player_sprite, items, player, level, screen):
+def movement(x, y, player_sprite, items, player, level, screen, next_level):
     global turn
     if turn and x == -30:
         player.image = pygame.transform.flip(player.image, True, False)
@@ -49,6 +49,7 @@ def movement(x, y, player_sprite, items, player, level, screen):
     level.pers_1.draw(screen)
     level.pers_2.draw(screen)
     items.draw(screen)
+    next_level.draw(screen)
     pygame.display.flip()
 
 
@@ -83,7 +84,6 @@ def draw_text(text, font):
             k = 0
         elif k > 28 and text_x == 970:
             remaining_st += word + ' '
-            flag = False
         elif len(st + ' ' + word) > 50 and not (k > 30 and text_x != 970) and not (k > 28 and text_x == 970):
             string = font.render(st, False, (0, 0, 0))
             text_y += 40
@@ -101,11 +101,11 @@ def draw_text(text, font):
 def make_dialog(dialog_text):
     dialog = pygame.sprite.Group()
     image = Image('dialog.png', (250, 500),
-                       (1420, 480), -1, dialog)
+                  (1420, 480), -1, dialog)
     image = Image('next.png', (1450, 900),
-                       (136, 44), -1, dialog)
+                  (136, 44), -1, dialog)
     image = Image('close.png', (1250, 900),
-                       (150, 44), -1, dialog)
+                  (150, 44), -1, dialog)
     dialog.draw(screen)
     draw_text(dialog_text, 45)
 
@@ -158,19 +158,26 @@ def open_book(book, text):
     return remaining_text
 
 
-def main_cycle(player, player_sprite, level, buttons, book, num_level):
+def main_cycle(player, player_sprite, level, buttons, book, num_level, next_level, id):
+    global dict_res
+    dict_res = {1: False, 2: False, 3: False}
+    con = sqlite3.connect("project_db.sqlite")
+    cur = con.cursor()
+    cur.execute("UPDATE Students_answers SET current_level=? WHERE id=?", (current_level:=num_level, id:=id))
+    con.commit()
+    con.close()
     running = True
     while running:
         pygame.display.flip()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                pygame.quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if move_is_valid(event.pos, (1860, 1910), (10, 60)):
                     running = False
-
+                    return True
                 if move_is_valid(event.pos, (1860, 1910), (70, 120)):
-                    name_book = dict_books[num_level]
+                    name_book = 'data\Знакомство с циклом while.txt'
                     with open(name_book, encoding="utf8", mode='r') as f:
                         data = f.read()
                         text = data.split('\n')
@@ -195,50 +202,53 @@ def main_cycle(player, player_sprite, level, buttons, book, num_level):
                     buttons.draw(screen)
                     level.pers_1.draw(screen)
                     level.pers_2.draw(screen)
+                    next_level.draw(screen)
                     pygame.display.flip()
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     while event.type == pygame.KEYDOWN and move_is_valid((player.player_x - 10,
-                                                                                  player.player_y),
-                                                                                 (0, width - 100),
-                                                                                 (0, height - 100)):
+                                                                          player.player_y),
+                                                                         (0, width - 100),
+                                                                         (0, height - 100)):
                         for event in pygame.event.get():
                             pass
-                        movement(-30, 0, player_sprite, buttons, player, level, screen)
+                        movement(-30, 0, player_sprite, buttons, player, level, screen, next_level)
                         if player.flag_dialog:
                             break
                 elif event.key == pygame.K_RIGHT:
                     while event.type == pygame.KEYDOWN and move_is_valid((player.player_x + 10,
-                                                                                  player.player_y),
-                                                                                 (0, width - 100),
-                                                                                 (0, height - 100)):
+                                                                          player.player_y),
+                                                                         (0, width - 100),
+                                                                         (0, height - 100)):
                         for event in pygame.event.get():
                             pass
-                        movement(30, 0, player_sprite, buttons, player, level, screen)
+                        movement(30, 0, player_sprite, buttons, player, level, screen, next_level)
                         if player.flag_dialog:
                             break
                 elif event.key == pygame.K_DOWN:
                     while event.type == pygame.KEYDOWN and move_is_valid((player.player_x,
-                                                                                  player.player_y + 10),
-                                                                                 (0, width - 100),
-                                                                                 (0, height - 100)):
+                                                                          player.player_y + 10),
+                                                                         (0, width - 100),
+                                                                         (0, height - 100)):
                         for event in pygame.event.get():
                             pass
-                        movement(0, 30, player_sprite, buttons, player, level, screen)
+                        movement(0, 30, player_sprite, buttons, player, level, screen, next_level)
                         if player.flag_dialog:
                             break
                 elif event.key == pygame.K_UP:
                     while event.type == pygame.KEYDOWN and move_is_valid((player.player_x,
-                                                                                  player.player_y - 10),
-                                                                                 (0, width - 100),
-                                                                                 (0, height - 100)):
+                                                                          player.player_y - 10),
+                                                                         (0, width - 100),
+                                                                         (0, height - 100)):
                         for event in pygame.event.get():
                             pass
-                        movement(0, -30, player_sprite, buttons, player, level, screen)
+                        movement(0, -30, player_sprite, buttons, player, level, screen, next_level)
                         if player.flag_dialog:
                             break
         pygame.display.flip()
+        if player.flag_next_level:
+            break
 
 
 class Level:
@@ -300,6 +310,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.y = pos[1]
         self.game_screen = game_screen
         self.flag_dialog = False
+        self.flag_next_level = False
         self.mask = pygame.mask.from_surface(self.image)
 
     def player_move(self, dif_x, dif_y, level):
@@ -308,6 +319,8 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = self.player_x
         self.rect.y = self.player_y
+        if move_is_valid((810, 30), (996, 45)) and all(dict_res.items()):
+            self.flag_next_level = True
         if pygame.sprite.spritecollideany(self, level.decoration_sprites):
             self.player_y -= dif_y
             self.player_x -= dif_x
@@ -325,7 +338,6 @@ class Player(pygame.sprite.Sprite):
             running = True
             while running:
                 for event in pygame.event.get():
-                    print(dict_res)
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         if move_is_valid(event.pos, (1450, 1586), (900, 944)):
                             app = QApplication(sys.argv)
@@ -333,8 +345,7 @@ class Player(pygame.sprite.Sprite):
                             ex.show()
                             if ex.finished:
                                 dict_res[1] = True
-                                print(dict_res)
-                                #running = False
+                                running = False
                         if move_is_valid(event.pos, (1250, 1400), (900, 944)):
                             running = False
             self.flag_dialog = True
@@ -357,7 +368,7 @@ class Player(pygame.sprite.Sprite):
                             answering.show()
                             if not answering.exec_() and answering.finished:
                                 dict_res[1] = True
-                                #running = False
+                                # running = False
                         if move_is_valid(event.pos, (1250, 1400), (900, 944)):
                             running = False
             self.flag_dialog = True

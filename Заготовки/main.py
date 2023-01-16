@@ -12,6 +12,7 @@ if __name__ == '__main__':
     # authorizing = Authorize.Authorize()
     # authorizing.show()
     # if not authorizing.exec_() and authorizing.authorized:
+        # id = authorizing.id
     if True:
         running = True
         turn = True
@@ -26,9 +27,11 @@ if __name__ == '__main__':
         buttons = pygame.sprite.Group()
         ground_sprites = pygame.sprite.Group()
         book = pygame.sprite.Group()
+        next_level = pygame.sprite.Group()
         close_button = Classes.Image('close_button.png', (1860, 10), (50, 50), None, buttons)
         background = Classes.Image('background.jpg', (0, 0), (1920, 1080), None, menu_ground)
         start_text = Classes.Image('start.png', (680, 400), (600, 170), None, menu_ground)
+        next_level_image = Classes.Image('next_level.png', (810, 30), (186, 75), None, next_level)
         menu_ground.draw(screen)
         buttons.draw(screen)
         pygame.display.flip()
@@ -47,40 +50,43 @@ if __name__ == '__main__':
             if break_while:
                 break
 
-        screen.fill((255, 255, 255))
-        flag_book = False
-        text = []
-        player = Classes.Player(screen, (0, 0), None, player_sprite)
-        level = Classes.Level(screen, 'level.txt', 20, 11, 100)
-        button_book = Classes.Image('book_button.png', (1860, 70), (50, 50), -1, buttons)
-        cross = Classes.Image('cross.png', (1700, 100), (50, 50), -1, book)
-        arrow = Classes.Image('arrow.png', (1500, 860), (70, 50), -1, book)
-        level.draw_level_ground('ground sprite.png', 'dec.png', player, player_sprite)
-        for item in ((113, 75), (713, 75), (1313, 75), (513, 475), (1813, 475)):
-            image_tv = Classes.Image('TV.png', (item[0], item[1]),
-                             (75, 75), None, level.decoration_sprites)
-        for item in ((413, 75), (1013, 75), (1613, 75), (1713, 475)):
-            image_pc = Classes.Image('comp.png', (item[0], item[1]),
-                             (75, 75), None, level.decoration_sprites)
-        for item in ((413, 375), ):
-            image_pc2 = Classes.Image('fra.png', (item[0], item[1]),
-                              (75, 75), None, level.decoration_sprites)
-        for item in ((1770, 930), (1802, 855)):
-            image_rad = Classes.Image('radiation.png', (item[0], item[1]),
-                              (75, 75), None, level.decoration_sprites)
-        for item in ((1845, 1005), (1845, 930), (1770, 1005)):
-            image_el = Classes.Image('elec.png', (item[0], item[1]),
-                             (75, 75), None, level.decoration_sprites)
-        image_pers = Classes.Image('pers1.png', (420, 480),
-                           (75, 111), None, level.pers_1)
-        image_pers = Classes.Image('pers2.png', (1690, 980),
-                           (75, 101), None, level.pers_2)
-        level.decoration_sprites.draw(screen)
-        level.pers_1.draw(screen)
-        level.pers_2.draw(screen)
-        buttons.draw(screen)
-        player_sprite.draw(screen)
-        Classes.main_cycle(player, player_sprite, level, buttons, book, 2)
+        if id == 2:
+            screen.fill((255, 255, 255))
+            flag_book = False
+            text = []
+            player = Classes.Player(screen, (0, 0), None, player_sprite)
+            level = Classes.Level(screen, 'data\level.txt', 20, 11, 100)
+            button_book = Classes.Image('book_button.png', (1860, 70), (50, 50), -1, buttons)
+            cross = Classes.Image('cross.png', (1700, 100), (50, 50), -1, book)
+            arrow = Classes.Image('arrow.png', (1500, 860), (70, 50), -1, book)
+            level.draw_level_ground('ground sprite.png', 'dec.png', player, player_sprite)
+            for item in ((113, 75), (713, 75), (1313, 75), (513, 475), (1813, 475)):
+                image_tv = Classes.Image('TV.png', (item[0], item[1]),
+                                         (75, 75), None, level.decoration_sprites)
+            for item in ((413, 75), (1013, 75), (1613, 75), (1713, 475)):
+                image_pc = Classes.Image('comp.png', (item[0], item[1]),
+                                         (75, 75), None, level.decoration_sprites)
+            for item in ((413, 375), ):
+                image_pc2 = Classes.Image('fra.png', (item[0], item[1]),
+                                          (75, 75), None, level.decoration_sprites)
+            for item in ((1770, 930), (1802, 855)):
+                image_rad = Classes.Image('radiation.png', (item[0], item[1]),
+                                          (75, 75), None, level.decoration_sprites)
+            for item in ((1845, 1005), (1845, 930), (1770, 1005)):
+                image_el = Classes.Image('elec.png', (item[0], item[1]),
+                                         (75, 75), None, level.decoration_sprites)
+            image_pers = Classes.Image('pers1.png', (420, 480),
+                                       (75, 111), None, level.pers_1)
+            image_pers = Classes.Image('pers2.png', (1690, 980),
+                                       (75, 101), None, level.pers_2)
+            level.decoration_sprites.draw(screen)
+            level.pers_1.draw(screen)
+            level.pers_2.draw(screen)
+            buttons.draw(screen)
+            player_sprite.draw(screen)
+            next_level.draw(screen)
+            if Classes.main_cycle(player, player_sprite, level, buttons, book, id, next_level):
+                pass # сделать босса
 
     pygame.quit()
     sys.exit(app.exec_())

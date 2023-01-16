@@ -38,6 +38,7 @@ class Authorize(QDialog):
             return
         sql = "INSERT INTO Players(login, password, current_level) VALUES(?, ?, ?)"
         self.cur.execute(sql, (login := self.name, password := self.password, current_level := 1))
+        self.id = self.cur.execute("SELECT MAX(id) FROM Players")
         self.authorized = self.name
         self.con.commit()
         self.con.close()
@@ -54,6 +55,7 @@ class Authorize(QDialog):
             self.id = info[0]
             self.authorized = self.name
             self.level = info[1]
+            self.id = self.cur.execute("SELECT MAX(id) FROM Players")
         else:
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Critical)

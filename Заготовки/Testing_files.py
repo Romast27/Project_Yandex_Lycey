@@ -10,7 +10,6 @@ class Example(QMainWindow):
         self.initUI(answer)
 
     def initUI(self, answer):
-        fname = None
         fname = QFileDialog.getOpenFileName(
             self, 'Выбрать файл с решением', '', 'Python файл (*.py)')[0]
         while not fname:
@@ -18,12 +17,8 @@ class Example(QMainWindow):
                 self, 'Выбрать файл с решением', '', 'Python файл (*.py)')[0]                
         with open(fname, 'r') as f:
             read_data = f.read()
-        compiled_file = compile(read_data, fname, mode='exec')
-        print('*')
-        print(exec(compiled_file))
-        print('**')
-        print(answer)        
-        while answer != exec(compiled_file):
+        exec(read_data, globals())
+        while answer != st:
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Critical)
             msg.setText("Ошибка\nНе правильный пароль")
@@ -33,9 +28,9 @@ class Example(QMainWindow):
                 self, 'Выбрать файл с решением', '', 'Python файл (*.py)')[0]
             while not fname:
                 fname = QFileDialog.getOpenFileName(
-                    self, 'Выбрать файл с решением', '', 'Python файл (*.py)')[0]                
+                    self, 'Выбрать файл с решением', '', 'Python файл (*.py)')[0]
             with open(fname, 'r') as f:
                 read_data = f.read()
-            compiled_file = compile(read_data, fname, mode='exec')
-            print(exec(compiled_file), answer, exec(compiled_file) == answer)
+            exec(read_data, globals())
         self.finished = True
+        return
