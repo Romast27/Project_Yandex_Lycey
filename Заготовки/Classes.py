@@ -160,7 +160,7 @@ def open_book(book, text):
 
 def main_cycle(player, player_sprite, level, buttons, book, num_level, next_level, id):
     global dict_res
-    dict_res = {1: False, 2: False, 3: False}
+    dict_res = {1: False, 2: False}
     con = sqlite3.connect("project_db.sqlite")
     cur = con.cursor()
     cur.execute("UPDATE Players SET current_level=? WHERE id=?", (current_level:=num_level, id:=id))
@@ -248,7 +248,7 @@ def main_cycle(player, player_sprite, level, buttons, book, num_level, next_leve
                             break
         pygame.display.flip()
         if player.flag_next_level:
-            break
+            return True
 
 
 class Level:
@@ -319,7 +319,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = self.player_x
         self.rect.y = self.player_y
-        if move_is_valid((self.player_y, self.player_x), (810, 996), (30, 45)) and all(dict_res.items()):
+        if move_is_valid((self.player_x, self.player_y), (810, 996), (20, 60)) and all(dict_res.items()):
             self.flag_next_level = True
         if pygame.sprite.spritecollideany(self, level.decoration_sprites):
             self.player_y -= dif_y
@@ -367,8 +367,8 @@ class Player(pygame.sprite.Sprite):
                                                                              'Как называется оператор прерывающий цикл?')
                             answering.show()
                             if not answering.exec_() and answering.finished:
-                                dict_res[1] = True
-                                # running = False
+                                dict_res[2] = True
+                                running = False
                         if move_is_valid(event.pos, (1250, 1400), (900, 944)):
                             running = False
             self.flag_dialog = True

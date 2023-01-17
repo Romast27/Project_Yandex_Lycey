@@ -1,4 +1,5 @@
 import sys
+import time
 
 import pygame
 from PyQt5.QtWidgets import QApplication
@@ -55,7 +56,7 @@ if __name__ == '__main__':
             flag_book = False
             text = []
             player = Classes.Player(screen, (0, 0), None, player_sprite)
-            level = Classes.Level(screen, 'data\level.txt', 20, 11, 100)
+            level = Classes.Level(screen, 'data\level_2.txt', 20, 11, 100)
             button_book = Classes.Image('book_button.png', (1860, 70), (50, 50), -1, buttons)
             cross = Classes.Image('cross.png', (1700, 100), (50, 50), -1, book)
             arrow = Classes.Image('arrow.png', (1500, 860), (70, 50), -1, book)
@@ -85,8 +86,30 @@ if __name__ == '__main__':
             buttons.draw(screen)
             player_sprite.draw(screen)
             next_level.draw(screen)
-            if Classes.main_cycle(player, player_sprite, level, buttons, book, 2, next_level, id):
-                pass # сделать босса
+            Classes.main_cycle(player, player_sprite, level, buttons, book, 2, next_level, id)
+            screen.fill((255, 255, 255))
+            boss = pygame.sprite.Group()
+            boss_image = Classes.Image('boss2.png', (566, 100), (788, 572), -1, boss)
+            level = Classes.Level(screen, 'data\level_boss.txt', 20, 11, 100)
+            image_task = Classes.Image('dialog_task.png', (215, 250), (430, 600), -1, boss)
+            image_task = Classes.Image('dialog_task.png', (730, 250), (430, 600), -1, boss)
+            image_task = Classes.Image('dialog_task.png', (1260, 250), (430, 600), -1, boss)
+            level.draw_level_ground('ground sprite.png', 'dec.png', player, player_sprite)
+            level.ground_sprites.draw(screen)
+            level.decoration_sprites.draw(screen)
+            boss.draw(screen)
+            player_sprite.draw(screen)
+            buttons.draw(screen)
+            pygame.display.flip()
+            running = True
+            while running:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                    if event.type == pygame.MOUSEBUTTONDOWN and Classes.move_is_valid(event.pos, (1840, 1910),
+                                                                                      (10, 80)):
+                        pygame.quit()
+            
 
-    pygame.quit()
+    # pygame.quit()
     # sys.exit(app.exec_())
