@@ -157,7 +157,6 @@ def open_book(book, text):
 
 
 def main_cycle(player, player_sprite, level, buttons, book, num_level, next_level, id):
-    return
     global dict_res
     dict_res = {1: False, 2: False}
     con = sqlite3.connect("project_db.sqlite")

@@ -19,7 +19,7 @@ class Example(QMainWindow):
             read_data = f.read()
         try:
             exec(read_data, globals())
-            while answer != st:
+            while answer != result:
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Critical)
                 msg.setText("Ошибка\nНе правильный пароль")
@@ -34,6 +34,7 @@ class Example(QMainWindow):
                     read_data = f.read()
                 exec(read_data, globals())
             self.finished = True
+            self.close()
             return
         except:
             msg = QMessageBox()
@@ -42,4 +43,5 @@ class Example(QMainWindow):
             msg.setWindowTitle("Error")
             msg.exec_()
             self.finished = False
+            self.close()
             return
