@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QApplication
 
 import Classes
 import Authorize
+import Testing_files
 
 
 if __name__ == '__main__':
@@ -87,29 +88,68 @@ if __name__ == '__main__':
             player_sprite.draw(screen)
             next_level.draw(screen)
             Classes.main_cycle(player, player_sprite, level, buttons, book, 2, next_level, id)
+
+            dict_task = {1: False, 2: False, 3: False}
             screen.fill((255, 255, 255))
             boss = pygame.sprite.Group()
+            task = pygame.sprite.Group()
+            task_1 = pygame.sprite.Group()
+            task_2 = pygame.sprite.Group()
+            task_3 = pygame.sprite.Group()
             boss_image = Classes.Image('boss2.png', (566, 100), (788, 572), -1, boss)
             level = Classes.Level(screen, 'data\level_boss.txt', 20, 11, 100)
-            image_task = Classes.Image('dialog_task.png', (215, 250), (430, 600), -1, boss)
-            image_task = Classes.Image('dialog_task.png', (730, 250), (430, 600), -1, boss)
-            image_task = Classes.Image('dialog_task.png', (1260, 250), (430, 600), -1, boss)
+            image_task = Classes.Image('dialog_task.png', (215, 250), (430, 700), -1, task_1)
+            image_task = Classes.Image('dialog_task.png', (730, 250), (430, 700), -1, task_2)
+            image_task = Classes.Image('dialog_task.png', (1260, 250), (430, 700), -1, task_3)
+            text_1 = "Напишите программу, которая записывает факториал числа 14 в переменную num (Факториал числа n обозначается n! и равен произведению всех натуральных чисел от 1 до n)."
+            text_2 = "В магазине акция: скидка 5% на товары, цена которых превышает 1000 рублей. Напишите программу, отчасти имитирующую работу кассового аппарата: имеется четыре товара с ценами - 25, 2000, 345.75 и 1746, нужно вычислить общую стоимость товаров с учётом скидки, округлить до целых и записать в переменную num."
+            text_3 = "Напишите программу, которая проверяет, является ли число 8 388 608 степенью двойки. Если да, то в переменную st запишите саму степень этого числа; если нет, запишите «НЕТ»."
+            image_next = Classes.Image('next.png', (450, 875), (136, 44), -1, task)
+            image_next = Classes.Image('next.png', (965, 875), (136, 44), -1, task)
+            image_next = Classes.Image('next.png', (1505, 875), (136, 44), -1, task)
             level.draw_level_ground('ground sprite.png', 'dec.png', player, player_sprite)
             level.ground_sprites.draw(screen)
             level.decoration_sprites.draw(screen)
             boss.draw(screen)
             player_sprite.draw(screen)
             buttons.draw(screen)
+            task_1.draw(screen)
+            task_2.draw(screen)
+            task_3.draw(screen)
+            task.draw(screen)
+            Classes.draw_text(text_1, 30, 245, 275, 20, 28)
+            Classes.draw_text(text_2, 30, 760, 275, 20, 28)
+            Classes.draw_text(text_3, 30, 1290, 275, 20, 28)
             pygame.display.flip()
             running = True
             while running:
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         pygame.quit()
-                    if event.type == pygame.MOUSEBUTTONDOWN and Classes.move_is_valid(event.pos, (1840, 1910),
-                                                                                      (10, 80)):
-                        pygame.quit()
-            
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if Classes.move_is_valid(event.pos, (1840, 1910), (10, 80)):
+                            pygame.quit()
+                        if Classes.move_is_valid(event.pos, (1840, 1910), (10, 80)):
+                            app_1 = QApplication(sys.argv)
+                            ex_1 = Testing_files.Example(87178291200)
+                            ex_1.show()
+                            if not ex_1.exec_() and ex_1.finished:
+                                dict_task[1] = True
+                        if Classes.move_is_valid(event.pos, (1840, 1910), (10, 80)):
+                            app_2 = QApplication(sys.argv)
+                            ex_2 = Testing_files.Example(3927)
+                            ex_2.show()
+                            if not ex_2.exec_() and ex_2.finished:
+                                dict_task[2] = True
+                        if Classes.move_is_valid(event.pos, (1840, 1910), (10, 80)):
+                            app_3 = QApplication(sys.argv)
+                            ex_3 = Testing_files.Example(23)
+                            ex_3.show()
+                            if not ex_3.exec_() and ex_3.finished:
+                                dict_res[3] = True
+                if all(dict_task.values()):
+                    print('Победа')
+
 
     # pygame.quit()
     # sys.exit(app.exec_())

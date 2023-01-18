@@ -69,14 +69,12 @@ def load_image(name, colorkey=None):
     return image
 
 
-def draw_text(text, font):
+def draw_text(text, font, text_x, text_y, len_st, dif_y):
     remaining_st = ''
     st = ''
     k = 0
     text = text.split(' ')
     font = pygame.font.SysFont("Segoe UI Black", font)
-    text_x = 280
-    text_y = 530
     for word in text:
         if k > 30 and text_x != 970:
             text_x = 970
@@ -84,16 +82,16 @@ def draw_text(text, font):
             k = 0
         elif k > 28 and text_x == 970:
             remaining_st += word + ' '
-        elif len(st + ' ' + word) > 50 and not (k > 30 and text_x != 970) and not (k > 28 and text_x == 970):
+        elif len(st + ' ' + word) > len_st and not (k > 30 and text_x != 970) and not (k > 28 and text_x == 970):
             string = font.render(st, False, (0, 0, 0))
-            text_y += 40
+            text_y += dif_y
             screen.blit(string, (text_x, text_y))
             st = ''
             k += 1
         st += ' ' + word
     if st and k < 28:
         string = font.render(st, False, (0, 0, 0))
-        text_y += 40
+        text_y += dif_y
         screen.blit(string, (text_x, text_y))
     pygame.display.flip()
 
@@ -107,7 +105,7 @@ def make_dialog(dialog_text):
     image = Image('close.png', (1250, 900),
                   (150, 44), -1, dialog)
     dialog.draw(screen)
-    draw_text(dialog_text, 45)
+    draw_text(dialog_text, 45, 280, 530, 50, 40)
 
 
 def open_book(book, text):
@@ -159,6 +157,7 @@ def open_book(book, text):
 
 
 def main_cycle(player, player_sprite, level, buttons, book, num_level, next_level, id):
+    return
     global dict_res
     dict_res = {1: False, 2: False}
     con = sqlite3.connect("project_db.sqlite")
@@ -340,7 +339,7 @@ class Player(pygame.sprite.Sprite):
                 for event in pygame.event.get():
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         if move_is_valid(event.pos, (1450, 1586), (900, 944)):
-                            app = QApplication(sys.argv)
+                            app_1 = QApplication(sys.argv)
                             ex = Testing_files.Example(answer)
                             ex.show()
                             if ex.finished:
@@ -362,7 +361,7 @@ class Player(pygame.sprite.Sprite):
                 for event in pygame.event.get():
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         if move_is_valid(event.pos, (1450, 1586), (900, 944)):
-                            app = QApplication(sys.argv)
+                            app_2 = QApplication(sys.argv)
                             answering = Answering_question.AnsweringQuestion('break',
                                                                              'Как называется оператор прерывающий цикл?')
                             answering.show()
