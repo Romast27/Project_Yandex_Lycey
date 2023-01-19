@@ -9,6 +9,8 @@ import Classes
 
 
 if __name__ == '__main__':
+    pygame.mixer.music.load("data/music.mp3")
+    pygame.mixer.music.play(-1)
     # app = QApplication(sys.argv)
     # authorizing = Authorize.Authorize()
     # authorizing.show()
