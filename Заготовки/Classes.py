@@ -163,7 +163,7 @@ def main_cycle(player, player_sprite, level, buttons, book, num_level, next_leve
     dict_res = {1: False, 2: False}
     con = sqlite3.connect("project_db.sqlite")
     cur = con.cursor()
-    cur.execute("UPDATE Players SET current_level=? WHERE id=?", (current_level:=num_level, id:=id))
+    cur.execute("UPDATE Players SET current_level=? WHERE id=?", (num_level, id))
     con.commit()
     con.close()
     running = True
