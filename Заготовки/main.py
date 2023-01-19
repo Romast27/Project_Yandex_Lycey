@@ -121,13 +121,13 @@ if __name__ == '__main__':
         cross = Classes.Image('cross.png', (1700, 100), (50, 50), -1, book)
         arrow = Classes.Image('arrow.png', (1500, 860), (70, 50), -1, book)
         level.draw_level_ground('floor1.png', 'dec1.png', player, player_sprite)
-        for item in ((113, 75), (713, 75), (1313, 75), (513, 475), (1813, 475)):
+        for item in ((113, 175), (813, 275), (1213, 475), (813, 875), (1813, 475)):
             image_tv = Classes.Image('TV.png', (item[0], item[1]),
                                      (75, 75), None, level.decoration_sprites)
-        for item in ((413, 75), (1013, 75), (1613, 75), (1713, 475)):
+        for item in ((413, 75), (1013, 75), (1513, 75), (1713, 375)):
             image_pc = Classes.Image('comp.png', (item[0], item[1]),
                                      (75, 75), None, level.decoration_sprites)
-        for item in ((413, 375),):
+        for item in ((513, 375),):
             image_pc2 = Classes.Image('fra.png', (item[0], item[1]),
                                       (75, 75), None, level.decoration_sprites)
         for item in ((1770, 930), (1802, 855)):
