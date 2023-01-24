@@ -15,7 +15,7 @@ import Authorize
 
 dict_res = {}
 turn = True
-with open('data\Texts\Текста диалогов2.txt', mode='r', encoding='utf8') as file:
+with open('data\Texts\Текста диалогов.txt', mode='r', encoding='utf8') as file:
     text_dialog = file.read()
     text_dialog = text_dialog.split('\n')
 pygame.init()
@@ -160,6 +160,37 @@ def open_book(book, text):
     return remaining_text
 
 
+def boss_func():
+    dict_task = {1: False, 2: False, 3: False}
+    running = True
+    while running:
+        if all(dict_task.values()):
+            print('Победа')
+            running = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if move_is_valid(event.pos, (1840, 1910), (10, 60)):
+                    pygame.quit()
+                    running = False
+                if move_is_valid(event.pos, (450, 586), (875, 919)) and not dict_task[1]:
+                    ex_4 = Testing_files.Example(87178291200)
+                    ex_4.show()
+                    if ex_4.finished:
+                        dict_task[1] = True
+                if move_is_valid(event.pos, (965, 1101), (875, 919)) and not dict_task[2]:
+                    ex_5 = Testing_files.Example(3927)
+                    ex_5.show()
+                    if ex_5.finished:
+                        dict_task[2] = True
+                if move_is_valid(event.pos, (1505, 1641), (875, 919)) and not dict_task[3]:
+                    ex_6 = Testing_files.Example(23)
+                    ex_6.show()
+                    if ex_6.finished:
+                        dict_task[3] = True
+
+
 def main_cycle(player, player_sprite, level, buttons, book, num_level, next_level, id):
     global dict_res
     dict_res = {1: False, 2: False}
@@ -185,39 +216,39 @@ def main_cycle(player, player_sprite, level, buttons, book, num_level, next_leve
                     pygame.display.flip()
                 if move_is_valid(event.pos, (1450, 1586), (900, 944)) and player.flag_dialog:
                     if player.running_level == 1:
-                        answer = '1, 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97'
-                        #app_1 = QApplication(sys.argv)
-                        ex = Testing_files.Example(answer)
-                        ex.show()
-                        if ex.finished:
-                            dict_res[1] = True
-                            screen.fill(pygame.Color((255, 255, 255)))
-                            level.ground_sprites.draw(screen)
-                            level.decoration_sprites.draw(screen)
-                            player_sprite.draw(screen)
-                            level.pers_1.draw(screen)
-                            level.pers_2.draw(screen)
-                            buttons.draw(screen)
-                            next_level.draw(screen)
-                            pygame.display.flip()
-                            player.flag_dialog = False
+                        if num_level == 1:
+                            pass
+                        if num_level == 2:
+                            answering = Answering_question.AnsweringQuestion('while n != 0', 'Напишите условия цикла while (вместе с самим while) удовлетворяющее условию задачи')
+                            answering.show()
+                            if not answering.exec_() and answering.finished:
+                                dict_res[1] = True
+                                screen.fill(pygame.Color((255, 255, 255)))
+                                level.ground_sprites.draw(screen)
+                                level.decoration_sprites.draw(screen)
+                                player_sprite.draw(screen)
+                                level.pers_1.draw(screen)
+                                level.pers_2.draw(screen)
+                                buttons.draw(screen)
+                                next_level.draw(screen)
+                                pygame.display.flip()
+                                player.flag_dialog = False
                     elif player.running_level == 2:
-                        #app_2 = QApplication(sys.argv)
-                        answering = Answering_question.AnsweringQuestion('break',
-                                                                         'Как называется оператор прерывающий цикл?')
-                        answering.show()
-                        if not answering.exec_() and answering.finished:
-                            dict_res[2] = True
-                            screen.fill(pygame.Color((255, 255, 255)))
-                            level.ground_sprites.draw(screen)
-                            level.decoration_sprites.draw(screen)
-                            player_sprite.draw(screen)
-                            level.pers_1.draw(screen)
-                            level.pers_2.draw(screen)
-                            buttons.draw(screen)
-                            next_level.draw(screen)
-                            pygame.display.flip()
-                            player.flag_dialog = False
+                        if num_level == 2:
+                            answering = Answering_question.AnsweringQuestion('n += 1', 'Напишите сокращенную форму записи оператора присваивание переменной n и числа 1')
+                            answering.show()
+                            if not answering.exec_() and answering.finished:
+                                dict_res[2] = True
+                                screen.fill(pygame.Color((255, 255, 255)))
+                                level.ground_sprites.draw(screen)
+                                level.decoration_sprites.draw(screen)
+                                player_sprite.draw(screen)
+                                level.pers_1.draw(screen)
+                                level.pers_2.draw(screen)
+                                buttons.draw(screen)
+                                next_level.draw(screen)
+                                pygame.display.flip()
+                                player.flag_dialog = False
                 if move_is_valid(event.pos, (1860, 1910), (10, 60)):
                     pygame.quit()
                     running = False
