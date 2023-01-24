@@ -3,9 +3,42 @@
   <component name="ChangeListManager">
     <list default="true" id="ae73f5e3-ece5-49e6-b025-a2389db24cf5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/untitled.py" beforeDir="false" afterPath="$PROJECT_DIR$/untitled.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/Authorize.py" beforeDir="false" afterPath="$PROJECT_DIR$/Заготовки/Authorize.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/Classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Заготовки/Classes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Заготовки/Testing_files.py" beforeDir="false" afterPath="$PROJECT_DIR$/Заготовки/Testing_files.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Заготовки/data/Текста диалогов2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Заготовки/data/Текста диалогов2.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/Copy of Sprites_decorations_not_so_ready.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/TV.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/arrow.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/background.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/book.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/book_button.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/boss2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/close.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/close_button.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/cod.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/comp.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/cross.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/dec.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/dialog.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/dialog_task.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/elec.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/fra.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/ground sprite.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/level_2.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/level_boss.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/next.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/next_level.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/pers.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/pers1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/pers2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/personages.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/radiation.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/start.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/Знакомство с циклом while.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/Текста диалогов2.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Заготовки/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Заготовки/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/project_db.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/Заготовки/project_db.sqlite" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,6 +52,14 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="ProjectId" id="2JVrZnrrF489smCyuJZvHBR2FZ2" />
   <component name="ProjectViewState">
@@ -91,7 +132,14 @@
       <option name="project" value="LOCAL" />
       <updated>1672346111048</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Основная разработка закончена (без тестирования)">
+      <created>1674072372407</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1674072372407</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -122,6 +170,7 @@
     <MESSAGE value="Основа проекта" />
     <MESSAGE value="Остальные вспомогательные файлы" />
     <MESSAGE value="Добавление заднего фона в игре" />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавление заднего фона в игре" />
+    <MESSAGE value="Основная разработка закончена (без тестирования)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Основная разработка закончена (без тестирования)" />
   </component>
 </project>

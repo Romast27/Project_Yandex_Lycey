@@ -29,7 +29,7 @@ class Authorize(QDialog):
             msg.exec_()
             return
         sql_names = "SELECT login FROM Players WHERE login=?"
-        if self.cur.execute(sql_names, (login := self.name,)).fetchone():
+        if self.cur.execute(sql_names, (login := self.name, )).fetchone():
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Critical)
             msg.setText("Ошибка\nТакой логин уже существует")
@@ -37,9 +37,10 @@ class Authorize(QDialog):
             msg.exec_()
             return
         sql = "INSERT INTO Players(login, password, current_level) VALUES(?, ?, ?)"
-        self.cur.execute(sql, (login := self.name, password := self.password, current_level := 1))
-        self.id = self.cur.execute("SELECT MAX(id) FROM Players")
-        self.authorized = self.name
+        self.cur.execute(sql, (login := self.name, password := self.password, current_level := 1)).fetchone()
+        self.id = self.cur.execute("SELECT id FROM Players WHERE login=?", (login := self.name, )).fetchone()
+        self.num_level = 1
+        self.authorized = True
         self.con.commit()
         self.con.close()
         self.close()
@@ -47,15 +48,12 @@ class Authorize(QDialog):
     def enter_account(self):
         self.name = self.edit_login.text()
         self.password = self.edit_password.text()
-        sql = "SELECT id FROM Players WHERE login=? AND password=?"
-        info = self.cur.execute(sql, (login := self.name, password := self.password)).fetchall()
+        sql = "SELECT id, current_level FROM Players WHERE login=?"
+        info = self.cur.execute(sql, (login := self.name,)).fetchone()
         if info:
-            sql = "SELECT id, current_level FROM Players WHERE login=?"
-            info = self.cur.execute(sql, (login := self.name,)).fetchone()
-            self.id = info[0]
-            self.authorized = self.name
-            self.level = info[1]
-            self.id = self.cur.execute("SELECT MAX(id) FROM Players")
+            self.authorized = True
+            self.num_level = info[0]
+            self.id = info[1]
         else:
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Critical)

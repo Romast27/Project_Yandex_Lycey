@@ -1,11 +1,12 @@
 import sys
 
-from PyQt5.QtWidgets import QMainWindow, QFileDialog, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QFileDialog, QMessageBox, QWidget
 
 
-class Example(QMainWindow):
+#class Example(QMainWindow):
+class Example(QWidget):
     def __init__(self, answer):
-        self.finished = None        
+        self.finished = None
         super().__init__()
         self.initUI(answer)
 
