@@ -5,20 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="43ad32ea-08f5-48dd-ae76-57d42792ca8d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Заготовки/data/Texts/Текста диалогов.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Заготовки/data/Texts/Первый диалог.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Заготовки/Answering question.ui" beforeDir="false" afterPath="$PROJECT_DIR$/Заготовки/Answering question.ui" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Заготовки/Classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Заготовки/Classes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Заготовки/data/Ct.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Заготовки/data/Texts/Текста диалогов2.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Заготовки/data/dec1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Заготовки/data/floor1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Заготовки/data/level_1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Заготовки/data/pers3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Заготовки/data/pers4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Заготовки/data/pers5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Заготовки/data/pers6.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Заготовки/data/pers63.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/Images/pers1.png" beforeDir="false" afterPath="$PROJECT_DIR$/Заготовки/data/Images/pers1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/Images/pers2.png" beforeDir="false" afterPath="$PROJECT_DIR$/Заготовки/data/Images/pers2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/Images/pers5.png" beforeDir="false" afterPath="$PROJECT_DIR$/Заготовки/data/Images/pers5.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/Images/pers6.png" beforeDir="false" afterPath="$PROJECT_DIR$/Заготовки/data/Images/pers6.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/Texts/level_2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Заготовки/data/Texts/level_2.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/Texts/level_boss.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Заготовки/data/Texts/level_boss.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/Texts/Книга_№2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Заготовки/data/Texts/Книга_№2.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Заготовки/data/Texts/Текста диалогов.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Заготовки/data/Texts/Текста диалогов.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Заготовки/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Заготовки/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Заготовки/project_db.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/Заготовки/project_db.sqlite" afterDir="false" />
     </list>
@@ -89,7 +86,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="ae73f5e3-ece5-49e6-b025-a2389db24cf5" name="Changes" comment="" />
+      <changelist id="43ad32ea-08f5-48dd-ae76-57d42792ca8d" name="Changes" comment="" />
       <created>1672174149210</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -130,7 +127,14 @@
       <option name="project" value="LOCAL" />
       <updated>1674132952114</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Добавление некоторых диалогов и задач">
+      <created>1674595031829</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1674595031829</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -163,6 +167,7 @@
     <MESSAGE value="Добавление заднего фона в игре" />
     <MESSAGE value="1 уровень" />
     <MESSAGE value="Добавлена музыка" />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавлена музыка" />
+    <MESSAGE value="Добавление некоторых диалогов и задач" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавление некоторых диалогов и задач" />
   </component>
 </project>
