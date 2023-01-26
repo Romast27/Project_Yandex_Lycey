@@ -9,13 +9,11 @@ import sqlite3
 
 import Answering_question
 import Testing_files
-import Authorize
 
 
-
-dict_res = {}
 turn = True
-with open('data\Texts\Текста диалогов.txt', mode='r', encoding='utf8') as file:
+dict_res = {}
+with open('data\Текста диалогов2.txt', mode='r', encoding='utf8') as file:
     text_dialog = file.read()
     text_dialog = text_dialog.split('\n')
 pygame.init()
@@ -34,6 +32,42 @@ def move_is_valid(pos, arg1, arg2):
     return arg1[0] <= pos[0] <= arg1[1] and arg2[0] <= pos[1] <= arg2[1]
 
 
+FPS = 50
+
+def terminate():
+    pygame.quit()
+    sys.exit()
+
+def start_screen():
+    intro_text = ["ЗАСТАВКА", "",
+                  "Правила игры",
+                  "Если в правилах несколько строк,",
+                  "приходится выводить их построчно"]
+
+    fon = pygame.transform.scale(load_image('fon.jpg'), (WIDTH, HEIGHT))
+    screen.blit(fon, (0, 0))
+    font = pygame.font.Font(None, 30)
+    text_coord = 50
+    for line in intro_text:
+        string_rendered = font.render(line, 1, pygame.Color('white'))
+        intro_rect = string_rendered.get_rect()
+        text_coord += 10
+        intro_rect.top = text_coord
+        intro_rect.x = 10
+        text_coord += intro_rect.height
+        screen.blit(string_rendered, intro_rect)
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.KEYDOWN or \
+                    event.type == pygame.MOUSEBUTTONDOWN:
+                return  # начинаем игру
+        pygame.display.flip()
+        clock.tick(FPS)
+
+
 def movement(x, y, player_sprite, items, player, level, screen, next_level, dict_res, num_level):
     global turn
     if turn and x == -30:
@@ -42,23 +76,21 @@ def movement(x, y, player_sprite, items, player, level, screen, next_level, dict
     elif not turn and x == 30:
         player.image = pygame.transform.flip(player.image, True, False)
         turn = True
-    sleep(0.05)
-    player.player_move(x, y, level, dict_res, num_level)
-    if not player.flag_dialog:
-        screen.fill(pygame.Color((255, 255, 255)))
-        level.ground_sprites.draw(screen)
-        level.decoration_sprites.draw(screen)
-        player_sprite.draw(screen)
-        level.pers_1.draw(screen)
-        level.pers_2.draw(screen)
-        level.pers_3.draw(screen)
-        items.draw(screen)
-        next_level.draw(screen)
-        pygame.display.flip()
+    sleep(0.075)
+    player.player_move(x, y, level)
+    screen.fill(pygame.Color('white'))
+    level.ground_sprites.draw(screen)
+    level.decoration_sprites.draw(screen)
+    player_sprite.draw(screen)
+    level.pers_1.draw(screen)
+    level.pers_2.draw(screen)
+    items.draw(screen)
+    next_level.draw(screen)
+    pygame.display.flip()
 
 
 def load_image(name, colorkey=None):
-    fullname = os.path.join('data\Images', name)
+    fullname = os.path.join('data', name)
     if not os.path.isfile(fullname):
         print(f"Файл с изображением '{fullname}' не найден")
         sys.exit()
@@ -73,12 +105,14 @@ def load_image(name, colorkey=None):
     return image
 
 
-def draw_text(text, font, text_x, text_y, len_st, dif_y):
+def draw_text(text, font):
     remaining_st = ''
     st = ''
     k = 0
     text = text.split(' ')
     font = pygame.font.SysFont("Segoe UI Black", font)
+    text_x = 280
+    text_y = 530
     for word in text:
         if k > 30 and text_x != 970:
             text_x = 970
@@ -86,16 +120,16 @@ def draw_text(text, font, text_x, text_y, len_st, dif_y):
             k = 0
         elif k > 28 and text_x == 970:
             remaining_st += word + ' '
-        elif len(st + ' ' + word) > len_st and not (k > 30 and text_x != 970) and not (k > 28 and text_x == 970):
+        elif len(st + ' ' + word) > 50 and not (k > 30 and text_x != 970) and not (k > 28 and text_x == 970):
             string = font.render(st, False, (0, 0, 0))
-            text_y += dif_y
+            text_y += 40
             screen.blit(string, (text_x, text_y))
             st = ''
             k += 1
         st += ' ' + word
     if st and k < 28:
         string = font.render(st, False, (0, 0, 0))
-        text_y += dif_y
+        text_y += 40
         screen.blit(string, (text_x, text_y))
     pygame.display.flip()
 
@@ -109,8 +143,7 @@ def make_dialog(dialog_text):
     image = Image('close.png', (1250, 900),
                   (150, 44), -1, dialog)
     dialog.draw(screen)
-    draw_text(dialog_text, 45, 280, 530, 50, 40)
-    pygame.display.flip()
+    draw_text(dialog_text, 45)
 
 
 def open_book(book, text):
@@ -158,133 +191,29 @@ def open_book(book, text):
     if remaining_st:
         remaining_text.append(remaining_st)
     remaining_text.extend(text[num:])
-    if len(remaining_text) == 1:
-        remaining_text = []
     return remaining_text
-
-
-def draw_game(screen, level, player_sprite, buttons, next_level):
-    screen.fill(pygame.Color((255, 255, 255)))
-    level.ground_sprites.draw(screen)
-    level.decoration_sprites.draw(screen)
-    player_sprite.draw(screen)
-    level.pers_1.draw(screen)
-    level.pers_2.draw(screen)
-    level.pers_3.draw(screen)
-    buttons.draw(screen)
-    next_level.draw(screen)
-    pygame.display.flip()
-
-
-def boss_func():
-    dict_task = {1: False, 2: False, 3: False}
-    running = True
-    broken = pygame.sprite.Group()
-    while running:
-        if all(dict_task.values()):
-            print('Победа')
-            running = False
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if move_is_valid(event.pos, (1840, 1910), (10, 60)):
-                    pygame.quit()
-                    running = False
-                    num_level = 0
-                elif move_is_valid(event.pos, (450, 586), (875, 919)) and not dict_task[1]:
-                    ex_4 = Testing_files.Example(87178291200)
-                    ex_4.show()
-                    if ex_4.finished:
-                        dict_task[1] = True
-                        image_broken = Image('dialog_task_broken.png', (215, 250), (430, 700), -1, broken)
-                elif move_is_valid(event.pos, (965, 1101), (875, 919)) and not dict_task[2]:
-                    ex_5 = Testing_files.Example(3927)
-                    ex_5.show()
-                    if ex_5.finished:
-                        dict_task[2] = True
-                        image_broken = Image('dialog_task_broken.png', (730, 250), (430, 700), -1, broken)
-                elif move_is_valid(event.pos, (1505, 1641), (875, 919)) and not dict_task[3]:
-                    ex_6 = Testing_files.Example(23)
-                    ex_6.show()
-                    if ex_6.finished:
-                        dict_task[3] = True
-                        image_broken = Image('dialog_task_broken.png', (1260, 250), (430, 700), -1, broken)
-        broken.draw(screen)
-        pygame.display.flip()
 
 
 def main_cycle(player, player_sprite, level, buttons, book, num_level, next_level, id):
     global dict_res
+    dict_res = {1: False, 2: False}
     con = sqlite3.connect("project_db.sqlite")
     cur = con.cursor()
-    cur.execute("UPDATE Players SET current_level=? WHERE id=?", (current_level := num_level, id := id))
+    cur.execute("UPDATE Players SET current_level=? WHERE id=?", (num_level, id))
     con.commit()
-    con.close()    
-    dict_res = {1: False, 2: False, 3: False}
+    con.close()
     running = True
     while running:
-        if player.flag_next_level:
-            running = False
-            break        
+        pygame.display.flip()
         for event in pygame.event.get():
-            print(player.running_level)
+            if event.type == pygame.QUIT:
+                pygame.quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if move_is_valid(event.pos, (1250, 1400), (900, 944)):
-                    player.flag_dialog = False
-                    draw_game(screen, level, player_sprite, buttons, next_level)
-                if move_is_valid(event.pos, (1450, 1586), (900, 944)) and player.flag_dialog:
-                    if player.running_level == 1:
-                        if num_level == 1:
-                            answering = Answering_question.AnsweringQuestion('print()', 'Напишите команду, которая используется для вывода на экран')
-                            answering.show()
-                            if not answering.exec_() and answering.finished:
-                                dict_res[1] = True
-                                draw_game(screen, level, player_sprite, buttons, next_level)
-                                player.flag_dialog = False
-                        if num_level == 2:
-                            answering = Answering_question.AnsweringQuestion('while n != 0:', 'Напишите условия цикла while (вместе с самим while) удовлетворяющее условию задачи')
-                            answering.show()
-                            if not answering.exec_() and answering.finished:
-                                dict_res[1] = True
-                                draw_game(screen, level, player_sprite, buttons, next_level)
-                                player.flag_dialog = False
-                    elif player.running_level == 2:
-                        if num_level == 1:
-                            answering = Answering_question.AnsweringQuestion('input()', 'Напишите команду, которая используется для ввода данных с клавиатуры')
-                            answering.show()
-                            if not answering.exec_() and answering.finished:
-                                dict_res[1] = True
-                                draw_game(screen, level, player_sprite, buttons, next_level)
-                                player.flag_dialog = False
-                        if num_level == 2:
-                            answering = Answering_question.AnsweringQuestion('n += 1', 'Напишите сокращенную форму записи оператора присваивание переменной n и числа 1')
-                            answering.show()
-                            if not answering.exec_() and answering.finished:
-                                dict_res[2] = True
-                                draw_game(screen, level, player_sprite, buttons, next_level)
-                                player.flag_dialog = False
-                    elif player.running_level == 3:
-                        if num_level == 1:
-                            answering = Answering_question.AnsweringQuestion('int()', 'Напишите функцию, которая в качестве аргумента получает строку, а на выходе возвращает число')
-                            answering.show()
-                            if not answering.exec_() and answering.finished:
-                                dict_res[3] = True
-                                draw_game(screen, level, player_sprite, buttons, next_level)
-                                player.flag_dialog = False
-                        if num_level == 2:
-                            answering = Answering_question.AnsweringQuestion('for i in range(10, 1, -1):', 'Напишите цикл от 10 до 1')
-                            answering.show()
-                            if not answering.exec_() and answering.finished:
-                                dict_res[3] = True
-                                draw_game(screen, level, player_sprite, buttons, next_level)
-                                player.flag_dialog = False
                 if move_is_valid(event.pos, (1860, 1910), (10, 60)):
-                    pygame.quit()
                     running = False
-                    num_level = 0
-                if move_is_valid(event.pos, (1860, 1910), (70, 120)) and not player.flag_dialog:
-                    name_book = f'data\Texts\Книга_№2.txt'
+                    return True
+                if move_is_valid(event.pos, (1860, 1910), (70, 120)):
+                    name_book = 'data\Знакомство с циклом while.txt'
                     with open(name_book, encoding="utf8", mode='r') as f:
                         data = f.read()
                         text = data.split('\n')
@@ -300,7 +229,7 @@ def main_cycle(player, player_sprite, level, buttons, book, num_level, next_leve
                                 if move_is_valid(event.pos, (1500, 1570), (860, 910)):
                                     if remaining_text:
                                         remaining_text = open_book(book, remaining_text)
-                if move_is_valid(event.pos, (1700, 1750), (100, 150)) and flag_book and not player.flag_dialog:
+                if move_is_valid(event.pos, (1700, 1750), (100, 150)) and flag_book:
                     flag_book = False
                     screen.fill((255, 255, 255))
                     level.ground_sprites.draw(screen)
@@ -309,55 +238,53 @@ def main_cycle(player, player_sprite, level, buttons, book, num_level, next_leve
                     buttons.draw(screen)
                     level.pers_1.draw(screen)
                     level.pers_2.draw(screen)
-                    level.pers_3.draw(screen)
                     next_level.draw(screen)
                     pygame.display.flip()
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     while event.type == pygame.KEYDOWN and move_is_valid((player.player_x - 10,
-                                                                                  player.player_y),
-                                                                                 (0, width - 100),
-                                                                                 (0,
-                                                                                  height - 100)) and not player.flag_dialog:
+                                                                          player.player_y),
+                                                                         (0, width - 100),
+                                                                         (0, height - 100)):
                         for event in pygame.event.get():
                             pass
-                        movement(-30, 0, player_sprite, buttons, player, level, screen, next_level, dict_res, num_level)
+                        movement(-30, 0, player_sprite, buttons, player, level, screen, next_level)
                         if player.flag_dialog:
                             break
                 elif event.key == pygame.K_RIGHT:
                     while event.type == pygame.KEYDOWN and move_is_valid((player.player_x + 10,
-                                                                                  player.player_y),
-                                                                                 (0, width - 100),
-                                                                                 (0,
-                                                                                  height - 100)) and not player.flag_dialog:
+                                                                          player.player_y),
+                                                                         (0, width - 100),
+                                                                         (0, height - 100)):
                         for event in pygame.event.get():
                             pass
-                        movement(30, 0, player_sprite, buttons, player, level, screen, next_level, dict_res, num_level)
+                        movement(30, 0, player_sprite, buttons, player, level, screen, next_level)
                         if player.flag_dialog:
                             break
                 elif event.key == pygame.K_DOWN:
                     while event.type == pygame.KEYDOWN and move_is_valid((player.player_x,
-                                                                                  player.player_y + 10),
-                                                                                 (0, width - 100),
-                                                                                 (0,
-                                                                                  height - 100)) and not player.flag_dialog:
+                                                                          player.player_y + 10),
+                                                                         (0, width - 100),
+                                                                         (0, height - 100)):
                         for event in pygame.event.get():
                             pass
-                        movement(0, 30, player_sprite, buttons, player, level, screen, next_level, dict_res, num_level)
+                        movement(0, 30, player_sprite, buttons, player, level, screen, next_level)
                         if player.flag_dialog:
                             break
                 elif event.key == pygame.K_UP:
                     while event.type == pygame.KEYDOWN and move_is_valid((player.player_x,
-                                                                                  player.player_y - 10),
-                                                                                 (0, width - 100),
-                                                                                 (0,
-                                                                                  height - 100)) and not player.flag_dialog:
+                                                                          player.player_y - 10),
+                                                                         (0, width - 100),
+                                                                         (0, height - 100)):
                         for event in pygame.event.get():
                             pass
-                        movement(0, -30, player_sprite, buttons, player, level, screen, next_level, dict_res, num_level)
+                        movement(0, -30, player_sprite, buttons, player, level, screen, next_level)
                         if player.flag_dialog:
                             break
+        pygame.display.flip()
+        if player.flag_next_level:
+            return True
 
 
 class Level:
@@ -395,7 +322,7 @@ class Level:
                         player.rect.y = self.cell_size * i
                         player_sprite.draw(self.screen)
                     if self.ground_file[i][u] == '-':
-                        screen.fill(pygame.Color((0, 0, 0)), (self.cell_size * u, self.cell_size * i,
+                        screen.fill(pygame.Color('black'), (self.cell_size * u, self.cell_size * i,
                                                             self.cell_size, self.cell_size))
                 except IndexError:
                     pass
@@ -420,16 +347,15 @@ class Player(pygame.sprite.Sprite):
         self.game_screen = game_screen
         self.flag_dialog = False
         self.flag_next_level = False
-        self.running_level = None
         self.mask = pygame.mask.from_surface(self.image)
 
-    def player_move(self, dif_x, dif_y, level, dict_res, num_level):
+    def player_move(self, dif_x, dif_y, level):
         self.player_y += dif_y
         self.player_x += dif_x
         self.rect = self.image.get_rect()
         self.rect.x = self.player_x
         self.rect.y = self.player_y
-        if move_is_valid((self.player_x, self.player_y), (810, 996), (20, 60)) and all(dict_res.values()):
+        if move_is_valid((self.player_x, self.player_y), (810, 996), (20, 60)) and all(dict_res.items()):
             self.flag_next_level = True
         if pygame.sprite.spritecollideany(self, level.decoration_sprites):
             self.player_y -= dif_y
@@ -443,9 +369,22 @@ class Player(pygame.sprite.Sprite):
             self.rect = self.image.get_rect()
             self.rect.x = self.player_x
             self.rect.y = self.player_y
-            make_dialog(text_dialog[(num_level - 1) * 3])
+            make_dialog(text_dialog[0])
+            answer = '1, 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97'
+            running = True
+            while running:
+                for event in pygame.event.get():
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if move_is_valid(event.pos, (1450, 1586), (900, 944)):
+                            app = QApplication(sys.argv)
+                            ex = Testing_files.Example(answer)
+                            ex.show()
+                            if ex.finished:
+                                dict_res[1] = True
+                                running = False
+                        if move_is_valid(event.pos, (1250, 1400), (900, 944)):
+                            running = False
             self.flag_dialog = True
-            self.running_level = 1
             return
         if pygame.sprite.spritecollideany(self, level.pers_2) and not dict_res[2] and not self.flag_dialog:
             self.player_y -= dif_y
@@ -453,20 +392,23 @@ class Player(pygame.sprite.Sprite):
             self.rect = self.image.get_rect()
             self.rect.x = self.player_x
             self.rect.y = self.player_y
-            make_dialog(text_dialog[(num_level - 1) * 3 + 1])
+            make_dialog(text_dialog[1])
+            running = True
+            while running:
+                for event in pygame.event.get():
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if move_is_valid(event.pos, (1450, 1586), (900, 944)):
+                            app = QApplication(sys.argv)
+                            answering = Answering_question.AnsweringQuestion('break',
+                                                                             'Как называется оператор прерывающий цикл?')
+                            answering.show()
+                            if not answering.exec_() and answering.finished:
+                                dict_res[2] = True
+                                running = False
+                        if move_is_valid(event.pos, (1250, 1400), (900, 944)):
+                            running = False
             self.flag_dialog = True
-            self.running_level = 2
             return
-        if pygame.sprite.spritecollideany(self, level.pers_3) and not dict_res[3] and not self.flag_dialog:
-            self.player_y -= dif_y
-            self.player_x -= dif_x
-            self.rect = self.image.get_rect()
-            self.rect.x = self.player_x
-            self.rect.y = self.player_y
-            make_dialog(text_dialog[(num_level - 1) * 3 + 2])
-            self.flag_dialog = True
-            self.running_level = 3
-            return        
         self.flag_dialog = False
 
 
