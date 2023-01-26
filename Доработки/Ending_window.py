@@ -1,15 +1,18 @@
 import pygame
 
 
-def end_window():
+def end_window(time):
     global y1, m1, k
     m = n1[n2]
     x1 = 10 * m1
-    if m == '*':
+    if m == '\n':
         y1 += 30
         m1 = 0
         k = True
         m = '\n'
+    if m == '*':
+        m = time
+        x1 += 10 * (len(time) - 1)
     font = pygame.font.SysFont('EpilepsySansBold', 21)
     text = font.render(m, True, pygame.Color('green'))
     text_x = 150 + x1
@@ -52,7 +55,7 @@ if __name__ == '__main__':
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 running = False
             if n2 < len(n1):
-                end_window()
+                end_window('3800')
             n2 += 1
             m1 += 1
         pygame.display.flip()
