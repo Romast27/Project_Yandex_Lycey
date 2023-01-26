@@ -10,10 +10,10 @@ def end_window():
         m1 = 0
         k = True
         m = '\n'
-    font = pygame.font.SysFont('EpilepsySansBold', 20)
+    font = pygame.font.SysFont('EpilepsySansBold', 21)
     text = font.render(m, True, pygame.Color('green'))
     text_x = 150 + x1
-    text_y = 10 + y1
+    text_y = 40 + y1
     text_w = text.get_width()
     text_h = text.get_height()
     screen.blit(text, (text_x, text_y))
@@ -21,7 +21,7 @@ def end_window():
         font1 = pygame.font.SysFont('EpilepsySansBold', 21)
         text1 = font1.render('C:\easycod\ending> ', True, pygame.Color('green'))
         text_x1 = 10
-        text_y1 = 10 + y1
+        text_y1 = 40 + y1
         text_w1 = text1.get_width()
         text_h1 = text1.get_height()
         screen.blit(text1, (text_x1, text_y1))
@@ -39,13 +39,13 @@ if __name__ == '__main__':
     m1 = 0
     y1 = 0
     clock = pygame.time.Clock()
-    '''font = pygame.font.SysFont('EpilepsySansBold', 32)
-    text = font.render('Press any button', True, pygame.Color('white'))
-    text_x = 800
-    text_y = 950
-    text_w = text.get_width()
-    text_h = text.get_height()
-    screen.blit(text, (text_x, text_y))'''
+    font2 = pygame.font.SysFont('EpilepsySansBold', 21)
+    text2 = font2.render("C:\easycod\ending> please hold down any button", True, pygame.Color('green'))
+    text_x2 = 10
+    text_y2 = 10
+    text_w2 = text2.get_width()
+    text_h2 = text2.get_height()
+    screen.blit(text2, (text_x2, text_y2))
     k = True
     while running:
         for event in pygame.event.get():
