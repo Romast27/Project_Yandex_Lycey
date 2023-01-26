@@ -37,5 +37,5 @@ if __name__ == '__main__':
             n2 += 1
             m1 += 1
         pygame.display.flip()
-        clock.tick(30)
+        clock.tick(15)
     pygame.quit()
