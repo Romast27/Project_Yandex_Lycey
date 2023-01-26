@@ -49,7 +49,7 @@ def main():
         screen.fill(BACKGROUND_COLOR)
         my_group.draw(screen)
         pygame.display.update()
-        clock.tick(10)
+        clock.tick(6)
 
 
 if __name__ == '__main__':
