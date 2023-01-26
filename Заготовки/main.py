@@ -116,7 +116,7 @@ if __name__ == '__main__':
         flag_book = False
         text = []
         player = Classes.Player(screen, (700, 500), None, player_sprite)
-        level = Classes.Level(screen, 'data\level_1.txt', 20, 11, 100)
+        level = Classes.Level(screen, 'data\Texts\level_1.txt', 20, 11, 100)
         button_book = Classes.Image('book_button.png', (1860, 70), (50, 50), -1, buttons)
         cross = Classes.Image('cross.png', (1700, 100), (50, 50), -1, book)
         arrow = Classes.Image('arrow.png', (1500, 860), (70, 50), -1, book)
