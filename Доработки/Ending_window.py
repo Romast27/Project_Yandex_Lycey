@@ -8,7 +8,7 @@ def end_window():
     if m == '\n':
         y1 += 15
         m1 = 0
-    font = pygame.font.Font(None, 16)
+    font = pygame.font.SysFont('EpilepsySansBold', 16)
     text = font.render(m, True, pygame.Color('green'))
     text_x = 10 + x1
     text_y = 10 + y1
